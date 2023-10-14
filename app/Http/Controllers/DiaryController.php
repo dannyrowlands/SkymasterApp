@@ -4,50 +4,37 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Booking;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DiaryController extends Controller
 {
-    const TANDEM = 'TANDEM';
-    const AFF = 'AFF';
-    const RAPS = 'RAPS';
-    const TZ = 'Europe/London';
 
-    public function showRAPS()
+    public function show($type)
     {
         return inertia('Diary/Calender', [
             'bookings' => Booking::
-                where(['booking_type' => self::RAPS])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(self::TZ))
+                where(['booking_type' => $type])
+                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', 'Europe/London')))
                 ->get(),
-            'type' => self::RAPS
+            'type' => $type
         ]);
     }
 
-    public function showAFF()
+    public function addBooking(Request $request, $type)
     {
-        return inertia('Diary/Calender', [
-            'bookings' => Booking::
-                where(['booking_type' => self::AFF])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(self::TZ))
-                ->get(),
-            'type' => self::AFF
-        ]);
-    }
-
-    public function showTANDEM()
-    {
-        return inertia('Diary/Calender', [
-            'bookings' => Booking::
-            where(['booking_type' => self::TANDEM])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(self::TZ))
-                ->get(),
-            'type' => self::TANDEM
-        ]);
-    }
-
-    public function addBooking() : array
-    {
-        return [];
+        /*
+         * $type = AFF, TANDEM, RAPS
+         *
+         * $request Content
+        {
+            "start": "2023-10-19T01:40:51.000Z",
+            "end": "2023-10-19T01:40:51.000Z",
+            "title": "Prof. Ova Trp Jr.",
+            "id": 59,
+            "index": 2
+        }
+        */
+        return $request;
     }
 
 }

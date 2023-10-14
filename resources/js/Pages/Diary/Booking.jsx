@@ -3,7 +3,18 @@ import {Head, router} from "@inertiajs/react";
 import _ from 'lodash';
 import setEventsData from '@/pages/Diary/Calender.jsx'
 
-const Booking = ({ auth, type, mode, event, setEventsData, setIsShowEdit, setIsShowNew }) => {
+const Booking = (
+    {
+         auth,
+         type,
+         mode,
+         event,
+         setEventsData,
+         setIsShowEdit,
+         setIsShowNew,
+         storeDataToDatabase
+    }
+) => {
 
     const [values, setValues] = useState(event)
 
@@ -33,8 +44,8 @@ const Booking = ({ auth, type, mode, event, setEventsData, setIsShowEdit, setIsS
             localStorage.setItem('events', JSON.stringify(events)); //Update Storage
             console.log('ID NOT FOUND', events)
         }
-        //router.post('/diary/add-booking/' + type, values)
         setEventsData(events)
+        storeDataToDatabase(events[index])
         setIsShowEdit(false)
         setIsShowNew(false)
     }

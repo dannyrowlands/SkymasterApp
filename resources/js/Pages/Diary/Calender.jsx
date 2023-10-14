@@ -96,12 +96,13 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import {differenceInCalendarDays, parseISO} from 'date-fns';
-import {Head} from "@inertiajs/react";
+import {Head, router} from "@inertiajs/react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Booking from '@/Pages/Diary/Booking.jsx'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import '../../../css/Calendar.css';
+import _ from "lodash";
 
 
 
@@ -115,6 +116,24 @@ const Calender = ({ auth, bookings, type }) => {
 
     const myEventsList = []
 
+    async function storeData(events) {
+        return await localStorage.setItem('events', JSON.stringify(events))
+    }
+
+    async function storeDataToDatabase(event) {
+        console.log('RUNNING ASYNC storeToDatabase')
+        return await axios.post(
+            '/diary/add-booking/' + type,
+            event
+        )
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
+
     useEffect(() => {
         bookings.forEach((booking, index) => {
             myEventsList.push(
@@ -127,7 +146,7 @@ const Calender = ({ auth, bookings, type }) => {
                 }
             )
         })
-        localStorage.setItem('events', JSON.stringify(myEventsList))
+        storeData(myEventsList)
     },[])
 
     const [eventsData, setEventsData] = useState(JSON.parse(localStorage.getItem('events')))
@@ -149,29 +168,21 @@ const Calender = ({ auth, bookings, type }) => {
         setIsShowNew(current => !current)
         setIsShowEdit(false)
         console.log(event);
-        // const title = window.prompt("New Event name");
-        // if (title)
-        //     setEventsData([
-        //         ...eventsData,
-        //         {
-        //             start,
-        //             end,
-        //             title
-        //         }
-        //     ]);
         console.log('Day Clicked', event)
-    };
-    const onEventResize = (data) => {
-        myEventsList[data.event.index] = { start: data.start, end: data.start, title: data.event.title, id: data.event.id, index: data.event.index }
-        console.log(myEventsList)
     };
 
     const onEventDrop = (data) => {
         console.log('DATA::',data)
-        myEventsList[data.event.index] = { start: data.start, end: data.start, title: data.event.title, id: data.event.id, index: data.event.index }
-        console.log(myEventsList)
+        data.event.start = data.start
+        data.event.end = data.start
+        let events = JSON.parse(localStorage.getItem('events'))
+        let index = _.findIndex(events, {'id': data.event.id,})
+        events[index] = data.event
+        storeData(events)
+        storeDataToDatabase(event)
+        console.log('EVENTS ARRAY::', events)
+        console.log('Events STORAGE::', JSON.parse(localStorage.getItem('events')))
     };
-
 
     return (
         <AuthenticatedLayout
@@ -193,7 +204,6 @@ const Calender = ({ auth, bookings, type }) => {
                                             events={eventsData}
                                             localizer={localizer}
                                             onEventDrop={onEventDrop}
-                                            onEventResize={onEventResize}
                                             resizable={false}
                                             style={{ height: "100vh" }}
                                             onSelectEvent={(event) => handleEventClick(event)}
@@ -214,6 +224,7 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeDataToDatabase={storeDataToDatabase}
                 />}
             {isShowNew &&
                 <Booking
@@ -224,6 +235,7 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeDataToDatabase={storeDataToDatabase}
                 />}
         </AuthenticatedLayout>
     );
