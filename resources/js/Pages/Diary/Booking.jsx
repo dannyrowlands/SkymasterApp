@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import {Head, router} from "@inertiajs/react";
 import _ from 'lodash';
 import setEventsData from '@/pages/Diary/Calender.jsx'
+import moment from "moment";
 
 const Booking = (
     {
-         auth,
-         type,
-         mode,
-         event,
-         setEventsData,
-         setIsShowEdit,
-         setIsShowNew,
-         storeLocalData,
-         storeDataToDatabase
+        auth,
+        type,
+        mode,
+        event,
+        setEventsData,
+        setIsShowEdit,
+        setIsShowNew,
+        storeLocalData,
+        storeDataToDatabase,
+        selectedDate
     }
 ) => {
 
@@ -31,17 +33,19 @@ const Booking = (
     function handleSubmit(e) {
         e.preventDefault()
         let events = JSON.parse(localStorage.getItem('events'))
-        let index = _.findIndex(events, {'id': values.id,})
         values.end = values.start
-        if (index !== -1) {
-            events[index] = values
+        values.title = String(values.start).substr(11,5) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
+        if (values.id) {
+            let index = _.findIndex(events, {'id': values.id,})
+            if (index !== -1) {
+                events[index] = values
+            }
         } else {
-            index = events.length
             events.push(values)
         }
+        storeDataToDatabase(values)
         storeLocalData(events)
         setEventsData(events)
-        storeDataToDatabase(events[index])
         setIsShowEdit(false)
         setIsShowNew(false)
     }
@@ -71,16 +75,29 @@ const Booking = (
                             <input id="email" defaultValue={values ? values.email : ''} onChange={handleChange} />
                         </div>
                         <div className="py-1 text-left">
+                            <label htmlFor="tel_no">Telephone No:</label>
+                        </div>
+                        <div className="py-1 text-left">
+                            <input id="tel_no" defaultValue={values ? values.tel_no : ''} onChange={handleChange} />
+                        </div>
+                        <div className="py-1 text-left">
+                            <label htmlFor="weight">Weight:</label>
+                        </div>
+                        <div className="py-1 text-left">
+                            <input id="weight" defaultValue={values ? values.weight : ''} onChange={handleChange} />
+                        </div>
+                        <div className="py-1 text-left">
                             <label htmlFor="start">Time:</label>
                         </div>
                         <div className="py-1 text-left">
-                            <select id="start" defaultValue={values ? values.start : '0800'} onChange={handleChange} >
-                                <option value="0800">08:00</option>
-                                <option value="1000">10:00</option>
-                                <option value="1200">12:00</option>
-                                <option value="1400">14:00</option>
-                                <option value="1600">16:00</option>
-                                <option value="1800">18:00</option>
+                            <select id="start" defaultValue={values ? moment(new Date(new Date(values.start).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss") : null} onChange={handleChange} >
+                                <option value="">Please Select</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(8)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>08:00</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(10)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>10:00</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(12)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>12:00</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(14)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>14:00</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(16)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>16:00</option>
+                                <option value={moment(new Date(new Date(new Date(selectedDate).setHours(18)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>18:00</option>
                             </select>
                         </div>
                         <div className="py-1 text-right">

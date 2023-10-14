@@ -23,7 +23,7 @@ class BookingFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'weight' => fake()->numberBetween(50, 100),
             'tel_no' => fake()->phoneNumber(),
-            'booking_timestamp' => fake()->dateTimeBetween('+1 week', '+1 month'),
+            'booking_timestamp' => fake()->dateTimeBetween('+1 day', '+1 month'),
             'booking_type' => $types[array_rand($types, 1)],
             'created_at' => now()
         ];
