@@ -136,9 +136,15 @@ const Calender = ({ auth, bookings, type }) => {
         bookings.forEach((booking, index) => {
             myEventsList.push(
                 {
-                    start: parseISO(booking.booking_timestamp),
-                    end: parseISO(booking.booking_timestamp),
-                    title: booking.name,
+                    start: new Date(booking.booking_timestamp),
+                    end: new Date(booking.booking_timestamp),
+                    all_day: false,
+                    first_name: booking.first_name,
+                    last_name: booking.last_name,
+                    title: parseISO(booking.booking_timestamp).toLocaleTimeString().substr(0, 5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name,
+                    email: booking.email,
+                    weight: booking.weight,
+                    tel_no: booking.tel_no,
                     id: booking.id,
                     index: index
                 }
@@ -167,14 +173,13 @@ const Calender = ({ auth, bookings, type }) => {
     }
 
     const onEventDrop = (data) => {
-        console.log('DATA::',data)
         data.event.start = data.start
         data.event.end = data.start
         let events = JSON.parse(localStorage.getItem('events'))
         let index = _.findIndex(events, {'id': data.event.id,})
         events[index] = data.event
         storeLocalData(events)
-        storeDataToDatabase(event)
+        storeDataToDatabase(data.event)
     }
 
     return (
@@ -189,6 +194,9 @@ const Calender = ({ auth, bookings, type }) => {
                             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                 <div className="p-6 text-gray-900">
                                     <h1 className='text-center'>{type} DIARY</h1>
+                                    <div className="text-center">
+                                        <a href="#" className="text-sm">[Bulk Edit Bookings]</a>
+                                    </div>
                                     <div className='calendar-container'>
                                         <DnDCalendar
                                             popup
@@ -201,6 +209,7 @@ const Calender = ({ auth, bookings, type }) => {
                                             style={{ height: "100vh" }}
                                             onSelectEvent={(event) => handleEventClick(event)}
                                             onDrillDown={(event) => handleDaySelect(event)}
+                                            views={['month', 'agenda']}
                                         />
                                     </div>
                                 </div>
