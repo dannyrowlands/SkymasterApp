@@ -18,8 +18,11 @@ class BookingFactory extends Factory
     {
         $types = ['TANDEM','AFF','RAPS'];
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
+            'weight' => fake()->numberBetween(50, 100),
+            'tel_no' => fake()->phoneNumber(),
             'booking_timestamp' => fake()->dateTimeBetween('+1 week', '+1 month'),
             'booking_type' => $types[array_rand($types, 1)],
             'created_at' => now()
