@@ -96,7 +96,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import {differenceInCalendarDays, parseISO} from 'date-fns';
-import {Head} from "@inertiajs/react";
+import {Head, router} from "@inertiajs/react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Booking from '@/Pages/Diary/Booking.jsx'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
@@ -118,7 +118,21 @@ const Calender = ({ auth, bookings, type }) => {
 
     async function storeData(events) {
         return await localStorage.setItem('events', JSON.stringify(events))
-    };
+    }
+
+    async function storeDataToDatabase(event) {
+        console.log('RUNNING ASYNC storeToDatabase')
+        return await axios.post(
+            '/diary/add-booking/' + type,
+            event
+        )
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
 
     useEffect(() => {
         bookings.forEach((booking, index) => {
@@ -165,10 +179,11 @@ const Calender = ({ auth, bookings, type }) => {
         let index = _.findIndex(events, {'id': data.event.id,})
         events[index] = data.event
         storeData(events)
+        storeDataToDatabase(event)
         console.log('EVENTS ARRAY::', events)
         console.log('Events STORAGE::', JSON.parse(localStorage.getItem('events')))
     };
-    
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -209,6 +224,7 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeDataToDatabase={storeDataToDatabase}
                 />}
             {isShowNew &&
                 <Booking
@@ -219,6 +235,7 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeDataToDatabase={storeDataToDatabase}
                 />}
         </AuthenticatedLayout>
     );

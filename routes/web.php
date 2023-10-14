@@ -39,24 +39,15 @@ Route::middleware('auth')->group(function () {
 
 /* Dairy */
 Route::get(
-    '/diary/RAPS',
-    [DiaryController::class, 'showRAPS']
-)->middleware(['auth', 'verified'])->name('diary.calender.raps');
-
-Route::get(
-    '/diary/AFF',
-    [DiaryController::class, 'showAFF']
-)->middleware(['auth', 'verified'])->name('diary.calender.aff');
-
-Route::get(
-    '/diary/TANDEM',
-    [DiaryController::class, 'showTANDEM']
-)->middleware(['auth', 'verified'])->name('diary.calender.tandem');
+    '/diary/{type}',
+    [DiaryController::class, 'show']
+)->middleware(['auth', 'verified'])->name('diary.calender');
 
 Route::post(
     '/diary/add-booking/{type}',
     [DiaryController::class, 'addBooking']
 )->middleware(['auth', 'verified'])->name('diary.calender.add');
+
 
 /* User */
 Route::get(
