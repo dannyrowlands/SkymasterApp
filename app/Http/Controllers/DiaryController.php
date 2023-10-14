@@ -14,7 +14,7 @@ class DiaryController extends Controller
         return inertia('Diary/Calender', [
             'bookings' => Booking::
                 where(['booking_type' => $type])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get())))
+                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get()))->subMonths(6))
                 ->get(),
             'type' => $type
         ]);
@@ -22,19 +22,19 @@ class DiaryController extends Controller
 
     public function booking(Request $request, $type)
     {
-        /*
-         * $type = AFF, TANDEM, RAPS
-         *
-         * $request Content
-        {
-            "start": "2023-10-19T01:40:51.000Z",
-            "end": "2023-10-19T01:40:51.000Z",
-            "title": "Prof. Ova Trp Jr.",
-            "id": 59,
-            "index": 2
-        }
-        */
-        return $request;
+        $booking = Booking::updateOrCreate(
+            ['id' =>  $request->id],
+            [
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'weight' => $request->weight,
+                'tel_no' => $request->tel_no,
+                'booking_type' => $request->type,
+                'booking_timestamp' => $request->start
+            ],
+        );
+        return $booking;
     }
 
 }
