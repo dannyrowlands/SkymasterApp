@@ -14,7 +14,7 @@ class DiaryController extends Controller
         return inertia('Diary/Calender', [
             'bookings' => Booking::
                 where(['booking_type' => $type])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', 'Europe/London')))
+                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get())))
                 ->get(),
             'type' => $type
         ]);

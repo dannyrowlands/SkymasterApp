@@ -116,7 +116,7 @@ const Calender = ({ auth, bookings, type }) => {
 
     const myEventsList = []
 
-    async function storeData(events) {
+    async function storeLocalData(events) {
         return await localStorage.setItem('events', JSON.stringify(events))
     }
 
@@ -146,7 +146,7 @@ const Calender = ({ auth, bookings, type }) => {
                 }
             )
         })
-        storeData(myEventsList)
+        storeLocalData(myEventsList)
     },[])
 
     const [eventsData, setEventsData] = useState(JSON.parse(localStorage.getItem('events')))
@@ -178,7 +178,7 @@ const Calender = ({ auth, bookings, type }) => {
         let events = JSON.parse(localStorage.getItem('events'))
         let index = _.findIndex(events, {'id': data.event.id,})
         events[index] = data.event
-        storeData(events)
+        storeLocalData(events)
         storeDataToDatabase(event)
         console.log('EVENTS ARRAY::', events)
         console.log('Events STORAGE::', JSON.parse(localStorage.getItem('events')))
