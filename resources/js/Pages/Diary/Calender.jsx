@@ -1,17 +1,17 @@
-// import React, { useState } from 'react';
-// import {Head} from "@inertiajs/react";
-// import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+// import React, { useState } from 'react'
+// import {Head} from "@inertiajs/react"
+// import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 // import Booking from '@/pages/Diary/Booking.jsx'
-// import Calendar from 'react-calendar';
-// import {differenceInCalendarDays, parseISO} from 'date-fns';
-// import '../../../css/Calendar.css';
+// import Calendar from 'react-calendar'
+// import {differenceInCalendarDays, parseISO} from 'date-fns'
+// import '../../../css/Calendar.css'
 //
 // const Calender = ({ auth, bookings, type }) => {
 //     //console.log('Bookings::',bookings)
 //
-//     const [date, setDate] = useState(new Date());
-//     const [isShown, setIsShown] = useState(false);
-//     const [mode, setMode] = useState('Add');
+//     const [date, setDate] = useState(new Date())
+//     const [isShown, setIsShown] = useState(false)
+//     const [mode, setMode] = useState('Add')
 //     const [diaryBookings, setDiaryBookings] = useState(bookings)
 //
 //     const datesToAddContentTo = []
@@ -27,17 +27,17 @@
 //         setMode('Add')
 //         setIsShown(current => !current)
 //         console.log('Day Clicked', mode)
-//     };
+//     }
 //
 //     const handleEventClick = event => {
 //         event.preventDefault()
 //         setMode('Edit')
 //         setIsShown(true)
 //         console.log('Event Clicked', mode)
-//     };
+//     }
 //
 //     function isSameDay(a, b) {
-//         return differenceInCalendarDays(a, b) === 0;
+//         return differenceInCalendarDays(a, b) === 0
 //     }
 //
 //     function tileContent({ date, view }) {
@@ -47,7 +47,7 @@
 //             if (datesToAddContentTo.find(dDate => isSameDay(dDate, date))) {
 //                  //console.log(date)
 //                 // console.log(date.toISOString().replace(/[-+()\s]/g, '').substring(0, 8))
-//                 return <div onClick={handleEventClick}>{ 'hello' }</div>;
+//                 return <div onClick={handleEventClick}>{ 'hello' }</div>
 //             }
 //         }
 //     }
@@ -91,20 +91,18 @@
 // export default Calender
 
 
-import React, { useState, useEffect } from 'react';
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import {differenceInCalendarDays, parseISO} from 'date-fns';
-import {Head, router} from "@inertiajs/react";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import React, { useState, useEffect } from 'react'
+import { Calendar, momentLocalizer } from "react-big-calendar"
+import moment from "moment"
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
+import {differenceInCalendarDays, parseISO} from 'date-fns'
+import {Head, router} from "@inertiajs/react"
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Booking from '@/Pages/Diary/Booking.jsx'
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import '../../../css/Calendar.css';
-import _ from "lodash";
-
-
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
+import "react-big-calendar/lib/css/react-big-calendar.css"
+import '../../../css/Calendar.css'
+import _ from "lodash"
 
 const Calender = ({ auth, bookings, type }) => {
 
@@ -123,14 +121,14 @@ const Calender = ({ auth, bookings, type }) => {
     async function storeDataToDatabase(event) {
         console.log('RUNNING ASYNC storeToDatabase')
         return await axios.post(
-            '/diary/add-booking/' + type,
+            '/diary/booking/' + type,
             event
         )
         .then(function (response) {
-            console.log(response);
+            console.log(response)
         })
         .catch(function (error) {
-            console.log(error);
+            console.log(error)
         })
     }
 
@@ -160,16 +158,13 @@ const Calender = ({ auth, bookings, type }) => {
         setCurrentEvent(event)
         setIsShowEdit(current => !current)
         setIsShowNew(false)
-        console.log('Event Clicked', event)
-    };
+    }
 
     const handleDaySelect = event => {
         setMode('Add')
         setIsShowNew(current => !current)
         setIsShowEdit(false)
-        console.log(event);
-        console.log('Day Clicked', event)
-    };
+    }
 
     const onEventDrop = (data) => {
         console.log('DATA::',data)
@@ -180,9 +175,7 @@ const Calender = ({ auth, bookings, type }) => {
         events[index] = data.event
         storeLocalData(events)
         storeDataToDatabase(event)
-        console.log('EVENTS ARRAY::', events)
-        console.log('Events STORAGE::', JSON.parse(localStorage.getItem('events')))
-    };
+    }
 
     return (
         <AuthenticatedLayout
@@ -224,6 +217,7 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeLocalData={storeLocalData}
                     storeDataToDatabase={storeDataToDatabase}
                 />}
             {isShowNew &&
@@ -235,11 +229,12 @@ const Calender = ({ auth, bookings, type }) => {
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
                     setIsShowNew={setIsShowNew}
+                    storeLocalData={storeLocalData}
                     storeDataToDatabase={storeDataToDatabase}
                 />}
         </AuthenticatedLayout>
-    );
+    )
 
 }
 
-export default Calender;
+export default Calender

@@ -20,7 +20,7 @@ class DiaryController extends Controller
         ]);
     }
 
-    public function addBooking(Request $request, $type)
+    public function booking(Request $request, $type)
     {
         /*
          * $type = AFF, TANDEM, RAPS

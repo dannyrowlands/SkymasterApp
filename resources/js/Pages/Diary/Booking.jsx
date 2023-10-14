@@ -12,6 +12,7 @@ const Booking = (
          setEventsData,
          setIsShowEdit,
          setIsShowNew,
+         storeLocalData,
          storeDataToDatabase
     }
 ) => {
@@ -32,18 +33,13 @@ const Booking = (
         let events = JSON.parse(localStorage.getItem('events'))
         let index = _.findIndex(events, {'id': values.id,})
         values.end = values.start
-        console.log('index',index)
         if (index !== -1) {
-            console.log('ID FOUND')
             events[index] = values
-            localStorage.setItem('events', JSON.stringify(events))
-            console.log(events)
         } else {
-            events.push(values); //Push New Item
-            console.log('values::',values)
-            localStorage.setItem('events', JSON.stringify(events)); //Update Storage
-            console.log('ID NOT FOUND', events)
+            index = events.length
+            events.push(values)
         }
+        storeLocalData(events)
         setEventsData(events)
         storeDataToDatabase(events[index])
         setIsShowEdit(false)
