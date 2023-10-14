@@ -44,9 +44,9 @@ Route::get(
 )->middleware(['auth', 'verified'])->name('diary.calender');
 
 Route::post(
-    '/diary/add-booking/{type}',
-    [DiaryController::class, 'addBooking']
-)->middleware(['auth', 'verified'])->name('diary.calender.add');
+    '/diary/booking/{type}',
+    [DiaryController::class, 'booking']
+)->middleware(['auth', 'verified'])->name('diary.calender.booking');
 
 
 /* User */
