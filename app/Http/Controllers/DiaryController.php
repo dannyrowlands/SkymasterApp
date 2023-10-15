@@ -9,7 +9,10 @@ use Inertia\Response;
 
 class DiaryController extends Controller
 {
-
+    /**
+     * @param $type
+     * @return Response
+     */
     public function show($type) : Response
     {
         $bookings = Booking::
@@ -29,6 +32,11 @@ class DiaryController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $type
+     * @return Booking
+     */
     public function booking(Request $request, $type) : Booking
     {
         $booking = Booking::updateOrCreate(
@@ -46,6 +54,10 @@ class DiaryController extends Controller
         return $booking;
     }
 
+    /**
+     * @param $id
+     * @return void
+     */
     public function delete($id) : void
     {
         $booking = Booking::find($id);

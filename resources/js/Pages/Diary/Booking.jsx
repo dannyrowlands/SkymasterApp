@@ -38,12 +38,18 @@ const Booking = (
         let events = JSON.parse(localStorage.getItem('events'))
         values.end = values.start
         values.title = String(values.start).substr(11,5) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
+        if (type === 'ALL')
+        {
+            values.title = '(' + values.booking_type.substr(0, 2) + ') ' + String(values.start).substr(11,5) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
+        }
+
         if (values.id) {
             let index = _.findIndex(events, {'id': values.id,})
             if (index !== -1) {
                 events[index] = values
             }
         } else {
+            values.booking_type = type
             events.push(values)
         }
         storeDataToDatabase(values)
@@ -61,16 +67,17 @@ const Booking = (
     function cancelBooking() {
         if (confirm('Do you wish to cancel this booking'))
         {
-            alert('Booking will cancel')
-            console.log(values)
-            let events = JSON.parse(localStorage.getItem('events'))
-            let index = _.findIndex(events, {'id': values.id,})
-            events.splice(index, 1)
-            deleteFromDatabase(values.id)
-            storeLocalData(events)
-            setEventsData(events)
-            setIsShowEdit(false)
-            setIsShowNew(false)
+            if(confirm('Booking will now cancel?')) {
+                console.log(values)
+                let events = JSON.parse(localStorage.getItem('events'))
+                let index = _.findIndex(events, {'id': values.id,})
+                events.splice(index, 1)
+                deleteFromDatabase(values.id)
+                storeLocalData(events)
+                setEventsData(events)
+                setIsShowEdit(false)
+                setIsShowNew(false)
+            }
         }
     }
 

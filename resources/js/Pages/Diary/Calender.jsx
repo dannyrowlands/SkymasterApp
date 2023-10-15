@@ -14,7 +14,6 @@ import _ from "lodash"
 
 const Calender = ({ auth, bookings, type }) => {
 
-    const [date, setDate] = useState(new Date())
     const [isShowEdit, setIsShowEdit] = useState(false)
     const [isShowNew, setIsShowNew] = useState(false)
     const [mode, setMode] = useState('Add')
@@ -24,20 +23,10 @@ const Calender = ({ auth, bookings, type }) => {
     const myEventsList = []
 
     async function storeLocalData(events) {
-        console.log('myEventsList', myEventsList)
         return await localStorage.setItem('events', JSON.stringify(events))
     }
 
     async function storeDataToDatabase(event) {
-        console.log('event::', event)
-        // if(!event.id)
-        // {
-        //     event.type = type
-        //     event.start = new Date(booking.booking_timestamp),
-        //     event.end = new Date(booking.booking_timestamp),
-        //
-        // }
-        console.log('RUNNING ASYNC storeToDatabase')
         return await axios.post(
             '/diary/booking/' + type,
             event
@@ -51,8 +40,6 @@ const Calender = ({ auth, bookings, type }) => {
     }
 
     async function deleteFromDatabase(id) {
-        console.log('event id::', id)
-        console.log('RUNNING ASYNC deleteFromDatabase')
         return await axios.delete(
             '/diary/booking/' + id
         )
@@ -66,8 +53,13 @@ const Calender = ({ auth, bookings, type }) => {
 
     useEffect(() => {
         bookings.forEach((booking, index) => {
-            console.log('Timestamp::',new Date(booking.booking_timestamp))
             let date = new Date(booking.booking_timestamp)
+            let title = String(date).substr(16,5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
+            if (type === 'ALL')
+            {
+                title = '(' + booking.booking_type.substr(0, 2) + ') ' + String(date).substr(16,5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
+            }
+
             myEventsList.push(
                 {
                     start: date,
@@ -75,13 +67,13 @@ const Calender = ({ auth, bookings, type }) => {
                     all_day: false,
                     first_name: booking.first_name,
                     last_name: booking.last_name,
-                    title: String(date).substr(16,5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name,
+                    title: title,
                     email: booking.email,
                     weight: booking.weight,
                     tel_no: booking.tel_no,
                     id: booking.id,
                     index: index,
-                    type: type
+                    type: booking.booking_type
                 }
             )
         })
@@ -95,7 +87,6 @@ const Calender = ({ auth, bookings, type }) => {
     const DnDCalendar = withDragAndDrop(Calendar)
 
     const handleEventClick = event => {
-        console.log('EVENT START::', event.start)
         setSelectedDate(event.start)
         setMode('Edit')
         setCurrentEvent(event)
@@ -104,11 +95,12 @@ const Calender = ({ auth, bookings, type }) => {
     }
 
     const handleDaySelect = event => {
-        console.log('Day Clicked Event::', event)
-        setSelectedDate(event)
-        setMode('Add')
-        setIsShowNew(current => !current)
-        setIsShowEdit(false)
+        if (type !== 'ALL') {
+            setSelectedDate(event)
+            setMode('Add')
+            setIsShowNew(current => !current)
+            setIsShowEdit(false)
+        }
     }
 
     const onEventDrop = (data) => {
@@ -120,6 +112,36 @@ const Calender = ({ auth, bookings, type }) => {
         storeLocalData(events)
         storeDataToDatabase(data.event)
         setEventsData(events)
+    }
+
+    const eventStyleGetter = (event) => {
+        var backgroundColor = '#ee9c9c'
+        if(event.type === 'RAPS')
+        {
+            backgroundColor = '#81a2c2'
+        }
+
+        if(event.type === 'TANDEM')
+        {
+            backgroundColor = '#81c283'
+        }
+
+        if(event.type === 'AFF')
+        {
+            backgroundColor = '#c2c081'
+        }
+        console.log('backgroundColor::',backgroundColor)
+        var style = {
+            backgroundColor: backgroundColor,
+            borderRadius: '0px',
+            opacity: 0.8,
+            color: 'black',
+            border: '0px',
+            display: 'block'
+        };
+        return {
+            style: style
+        };
     }
 
     return (
@@ -150,6 +172,7 @@ const Calender = ({ auth, bookings, type }) => {
                                             onSelectEvent={(event) => handleEventClick(event)}
                                             onDrillDown={(event) => handleDaySelect(event)}
                                             views={['month', 'agenda']}
+                                            eventPropGetter={eventStyleGetter}
                                         />
                                     </div>
                                 </div>
