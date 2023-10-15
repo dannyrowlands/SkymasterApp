@@ -12,14 +12,17 @@ const Booking = (
         event,
         setEventsData,
         setIsShowEdit,
+        isShowEdit,
         setIsShowNew,
         storeLocalData,
         storeDataToDatabase,
+        deleteFromDatabase,
         selectedDate
     }
 ) => {
 
     const [values, setValues] = useState(event)
+    const [isShowCancel, setIsShowCancel] = useState(isShowEdit)
 
     function handleChange(e) {
         const key = e.target.id;
@@ -50,11 +53,39 @@ const Booking = (
         setIsShowNew(false)
     }
 
+    function hidePopup() {
+        setIsShowNew(false)
+        setIsShowEdit(false)
+    }
+
+    function cancelBooking() {
+        if (confirm('Do you wish to cancel this booking'))
+        {
+            alert('Booking will cancel')
+            console.log(values)
+            let events = JSON.parse(localStorage.getItem('events'))
+            let index = _.findIndex(events, {'id': values.id,})
+            events.splice(index, 1)
+            deleteFromDatabase(values.id)
+            storeLocalData(events)
+            setEventsData(events)
+            setIsShowEdit(false)
+            setIsShowNew(false)
+        }
+    }
+
     return (
         <>
             <div className='popup'>
                 <div className="shadow-lg p-3 mb-5 bg-gray-100 rounded">
                     <div className="font-semibold">{mode} {type} Booking</div>
+                    {isShowCancel &&
+                        <div className="row">
+                            <div className="py-1 text-left float-sm-left col">
+                                <button type="cancel" onClick={cancelBooking}>[Cancel Booking]</button>
+                            </div>
+                        </div>
+                    }
                     <form onSubmit={handleSubmit}>
                         <div className="py-1 text-left">
                             <label htmlFor="first_name">First name:</label>
@@ -100,8 +131,13 @@ const Booking = (
                                 <option value={moment(new Date(new Date(new Date(selectedDate).setHours(18)).setMinutes(0)).setSeconds(0)).format("YYYY-MM-DD HH:mm:ss")}>18:00</option>
                             </select>
                         </div>
-                        <div className="py-1 text-right">
-                            <button type="submit">Submit</button>
+                        <div className="row">
+                            <div className="py-1 text-right float-sm-left col">
+                                <button type="cancel" onClick={hidePopup}>Cancel</button>
+                            </div>
+                            <div className="py-1 text-left float-sm-right col">
+                                <button type="submit">Submit</button>
+                            </div>
                         </div>
                     </form>
                 </div>

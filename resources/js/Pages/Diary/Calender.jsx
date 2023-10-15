@@ -96,6 +96,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
 import {differenceInCalendarDays, parseISO, toDate} from 'date-fns'
+import { setAuth, refreshToken } from '@/Pages/Auth/HandleTokens.jsx'
 import {Head, router} from "@inertiajs/react"
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Booking from '@/Pages/Diary/Booking.jsx'
@@ -142,8 +143,21 @@ const Calender = ({ auth, bookings, type }) => {
         })
     }
 
+    async function deleteFromDatabase(id) {
+        console.log('event id::', id)
+        console.log('RUNNING ASYNC deleteFromDatabase')
+        return await axios.delete(
+            '/diary/booking/' + id
+        )
+        .then(function (response) {
+            console.log(response)
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
-        console.log('DB Bookings::',bookings)
         bookings.forEach((booking, index) => {
             console.log('Timestamp::',new Date(booking.booking_timestamp))
             let date = new Date(booking.booking_timestamp)
@@ -244,10 +258,12 @@ const Calender = ({ auth, bookings, type }) => {
                     event={currentEvent}
                     setEventsData={setEventsData}
                     setIsShowEdit={setIsShowEdit}
+                    isShowEdit={isShowEdit}
                     setIsShowNew={setIsShowNew}
                     storeLocalData={storeLocalData}
                     storeDataToDatabase={storeDataToDatabase}
                     selectedDate={selectedDate}
+                    deleteFromDatabase={deleteFromDatabase}
                 />}
             {isShowNew &&
                 <Booking
@@ -261,6 +277,7 @@ const Calender = ({ auth, bookings, type }) => {
                     storeLocalData={storeLocalData}
                     storeDataToDatabase={storeDataToDatabase}
                     selectedDate={selectedDate}
+                    deleteFromDatabase={deleteFromDatabase}
                 />}
         </AuthenticatedLayout>
     )

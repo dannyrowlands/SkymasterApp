@@ -48,6 +48,10 @@ Route::post(
     [DiaryController::class, 'booking']
 )->middleware(['auth', 'verified'])->name('diary.calender.booking');
 
+Route::delete(
+    '/diary/booking/{booking}',
+    [DiaryController::class, 'delete']
+)->middleware(['auth', 'verified'])->name('diary.calender.delete');
 
 /* User */
 Route::get(
