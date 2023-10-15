@@ -5,22 +5,31 @@ use App\Models\User;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Response;
 
 class DiaryController extends Controller
 {
 
-    public function show($type)
+    public function show($type) : Response
     {
+        $bookings = Booking::
+        where(['booking_type' => $type])
+            ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get()))->subMonths(6))
+            ->get();
+
+        if ($type === 'ALL') {
+            $bookings = Booking::
+            whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get()))->subMonths(6))
+                ->get();
+        }
+
         return inertia('Diary/Calender', [
-            'bookings' => Booking::
-                where(['booking_type' => $type])
-                ->whereDate('booking_timestamp', '>=', Carbon::now(env('APP_TZ', date_default_timezone_get()))->subMonths(6))
-                ->get(),
+            'bookings' => $bookings,
             'type' => $type
         ]);
     }
 
-    public function booking(Request $request, $type)
+    public function booking(Request $request, $type) : Booking
     {
         $booking = Booking::updateOrCreate(
             ['id' =>  $request->id],
@@ -37,4 +46,9 @@ class DiaryController extends Controller
         return $booking;
     }
 
+    public function delete($id) : void
+    {
+        $booking = Booking::find($id);
+        $booking->delete();
+    }
 }
