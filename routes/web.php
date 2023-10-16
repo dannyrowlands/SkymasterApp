@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\JumperController;
+use App\Http\Controllers\PilotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DiaryController;
@@ -37,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 /* Dairy */
 Route::get(
     '/diary/{type}',
@@ -52,6 +55,21 @@ Route::delete(
     '/diary/booking/{booking}',
     [DiaryController::class, 'delete']
 )->middleware(['auth', 'verified'])->name('diary.calender.delete');
+
+
+/* Pilot */
+Route::get(
+    '/pilots',
+    [PilotController::class, 'showList']
+)->middleware(['auth', 'verified'])->name('pilots.showList');
+
+
+/* Jumper */
+Route::get(
+    '/jumpers',
+    [JumperController::class, 'showList']
+)->middleware(['auth', 'verified'])->name('jumpers.showList');
+
 
 /* User */
 Route::get(

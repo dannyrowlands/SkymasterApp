@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Kit extends Model
 {
@@ -25,4 +26,12 @@ class Kit extends Model
         'aad_service_due',
         'reserve_due',
     ];
+
+    /**
+     * Get the jumper for this kit.
+     */
+    public function jumper(): BelongsTo
+    {
+        return $this->belongsTo(Jumper::class);
+    }
 }

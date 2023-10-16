@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Jumper extends Model
 {
@@ -17,4 +18,12 @@ class Jumper extends Model
     protected $fillable = [
         'person_id',
     ];
+
+    /**
+     * Get the person for this jumper.
+     */
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(People::class);
+    }
 }

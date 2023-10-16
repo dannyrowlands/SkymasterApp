@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pilot extends Model
 {
@@ -17,4 +18,12 @@ class Pilot extends Model
     protected $fillable = [
         'person_id',
     ];
+
+    /**
+     * Get the person for this pilot.
+     */
+    public function person(): BelongsTo
+    {
+        return $this->belongsTo(People::class);
+    }
 }

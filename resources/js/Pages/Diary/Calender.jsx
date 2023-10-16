@@ -36,6 +36,9 @@ const Calender = ({ auth, bookings, type }) => {
         })
         .catch(function (error) {
             console.log('ERROR RESPONSE::', error)
+            if(error.code === 'ERR_BAD_REQUEST') {
+                window.location.replace("/login")
+            }
         })
     }
 
@@ -44,10 +47,13 @@ const Calender = ({ auth, bookings, type }) => {
             '/diary/booking/' + id
         )
         .then(function (response) {
-            console.log(response)
+            console.log('RESPONSE::',response)
         })
         .catch(function (error) {
-            console.log(error)
+            console.log('ERROR RESPONSE::', error)
+            if(error.code === 'ERR_BAD_REQUEST') {
+                window.location.replace("/login")
+            }
         })
     }
 
@@ -147,7 +153,7 @@ const Calender = ({ auth, bookings, type }) => {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Calender</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Diaries</h2>}
         >
             <Head title="Calender" />
                 <div className='app'>
