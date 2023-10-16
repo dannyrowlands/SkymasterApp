@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Kit extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'jumper_id',
+        'indentifer',
+        'main',
+        'main_size',
+        'reserve',
+        'reserve_size',
+        'aad',
+        'aad_service_due',
+        'reserve_due',
+    ];
 }
