@@ -32,10 +32,10 @@ const Calender = ({ auth, bookings, type }) => {
             event
         )
         .then(function (response) {
-            console.log(response)
+            console.log('RESPONSE::',response)
         })
         .catch(function (error) {
-            console.log(error)
+            console.log('ERROR RESPONSE::', error)
         })
     }
 
@@ -54,10 +54,10 @@ const Calender = ({ auth, bookings, type }) => {
     useEffect(() => {
         bookings.forEach((booking, index) => {
             let date = new Date(booking.booking_timestamp)
-            let title = String(date).substr(16,5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
+            let title = String(date).substr(16,2) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
             if (type === 'ALL')
             {
-                title = '(' + booking.booking_type.substr(0, 2) + ') ' + String(date).substr(16,5) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
+                title = '(' + booking.booking_type.substr(0, 2) + ') ' + String(date).substr(16,2) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
             }
 
             myEventsList.push(
@@ -73,7 +73,8 @@ const Calender = ({ auth, bookings, type }) => {
                     tel_no: booking.tel_no,
                     id: booking.id,
                     index: index,
-                    type: booking.booking_type
+                    type: booking.booking_type,
+                    dob: booking.dob,
                 }
             )
         })
@@ -130,7 +131,6 @@ const Calender = ({ auth, bookings, type }) => {
         {
             backgroundColor = '#c2c081'
         }
-        console.log('backgroundColor::',backgroundColor)
         var style = {
             backgroundColor: backgroundColor,
             borderRadius: '0px',

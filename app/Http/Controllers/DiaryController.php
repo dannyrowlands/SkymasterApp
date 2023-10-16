@@ -48,7 +48,8 @@ class DiaryController extends Controller
                 'weight' => $request->weight,
                 'tel_no' => $request->tel_no,
                 'booking_type' => $request->type,
-                'booking_timestamp' => $request->start
+                'booking_timestamp' => $request->start,
+                'dob' => $request->dob,
             ],
         );
         return $booking;
