@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\JumperResource;
 use App\Models\Jumper;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -14,10 +15,11 @@ class JumperController extends Controller
      */
     public function showList() : Response
     {
-        $jumpers = Jumper::all();
+        $jumpers = JumperResource::collection(Jumper::all());
 
         return inertia('Jumper/List', [
-            'jumpers' => $jumpers,
+            'list' => $jumpers,
         ]);
     }
+
 }

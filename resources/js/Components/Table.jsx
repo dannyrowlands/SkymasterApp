@@ -16,7 +16,7 @@ const Table = ({ theadData, tbodyData, handleClick, modelName, customClass = 'ta
             <tbody>
             {tbodyData.map((item) => {
                 const object = item.items
-                return <TableRow key={item.id} id={item.id} data={item.items} handleClick={handleClick} modelName={modelName}/>;
+                return <TableRow key={item.id+'-'+Math.floor(Math.random() * 100000)} id={item.id} data={item.items} handleClick={handleClick} modelName={modelName}/>;
             })}
             </tbody>
         </table>

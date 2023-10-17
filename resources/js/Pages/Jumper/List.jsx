@@ -6,7 +6,7 @@ import storeLocalData from '@/Pages/Diary/Calender'
 const List = (
     {
         auth,
-        jumpers
+        list
     }
 ) => {
 
@@ -19,20 +19,31 @@ const List = (
     }
 
     useEffect(() => {
-        let count = 0
-        jumpers.forEach((jumper, index) => {
-            count++
+        console.log(list.data)
+        list.data.forEach((item, index) => {
+            console.log('Jumper::',item)
             myList.push(
                 {
-                    id: jumper.id,
-                    items: Object.values(jumper),
+                    id: item.id,
+                    items: [
+                        item.full_name,
+                        item.email,
+                        item.dob,
+                        item.last_updated
+                    ],
                 }
             )
         })
         setTbodyData(myList)
+        console.log('myList::',myList)
     },[])
 
-    const theadData = ['id', 'person_id', 'created_at', 'updated_at']
+    const theadData = [
+        'Name',
+        'Email',
+        'Date of Birth',
+        'Last Updated'
+    ]
 
     return (
         <>

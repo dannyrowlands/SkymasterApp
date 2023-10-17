@@ -8,7 +8,7 @@ import Table from "@/Components/Table.jsx";
 const List = (
     {
         auth,
-        pilots
+        list
     }
 ) => {
     const myList = []
@@ -20,20 +20,28 @@ const List = (
     }
 
     useEffect(() => {
-        let count = 0
-        pilots.forEach((pilot, index) => {
-            count++
+        list.data.forEach((item, index) => {
             myList.push(
                 {
-                    id: count,
-                    items: Object.values(pilot),
+                    id: item.id,
+                    items: [
+                        item.full_name,
+                        item.email,
+                        item.dob,
+                        item.last_updated
+                    ],
                 }
             )
         })
         setTbodyData(myList)
     },[])
 
-    const theadData = ['id', 'person_id', 'created_at', 'updated_at']
+    const theadData = [
+        'Name',
+        'Email',
+        'Date of Birth',
+        'Last Updated'
+    ]
     return (
         <>
             <AuthenticatedLayout
