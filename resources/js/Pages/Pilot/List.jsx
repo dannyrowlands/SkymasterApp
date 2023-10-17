@@ -12,10 +12,11 @@ const List = (
     }
 ) => {
     const myList = []
+    const modelName = 'Pilot'
     const [tbodyData, setTbodyData] = useState([])
 
-    const handleClick = (id) => {
-        console.log('CLICKED Pilot :: ',id)
+    const handleClick = (id, modelName) => {
+        console.log('CLICKED ' + modelName + ' :: ',id)
     }
 
     useEffect(() => {
@@ -51,6 +52,7 @@ const List = (
                                             theadData={theadData}
                                             tbodyData={tbodyData}
                                             handleClick={handleClick}
+                                            modelName={modelName}
                                         />
                                     </div>
                                 </div>

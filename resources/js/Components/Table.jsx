@@ -2,7 +2,7 @@ import React from "react";
 import TableRow from "./TableRow";
 import TableHeadItem from "./TableHead";
 
-const Table = ({ theadData, tbodyData, handleClick, customClass = 'table' }) => {
+const Table = ({ theadData, tbodyData, handleClick, modelName, customClass = 'table' }) => {
 
     return (
         <table className={customClass}>
@@ -16,7 +16,7 @@ const Table = ({ theadData, tbodyData, handleClick, customClass = 'table' }) => 
             <tbody>
             {tbodyData.map((item) => {
                 const object = item.items
-                return <TableRow key={item.id} id={item.id} data={item.items} handleClick={handleClick}/>;
+                return <TableRow key={item.id} id={item.id} data={item.items} handleClick={handleClick} modelName={modelName}/>;
             })}
             </tbody>
         </table>
