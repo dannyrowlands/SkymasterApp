@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Jumper;
+use App\Models\People;
 use App\Models\User;
 use App\Models\Booking;
 use Carbon\Carbon;
@@ -48,9 +50,36 @@ class DiaryController extends Controller
                 'weight' => $request->weight,
                 'tel_no' => $request->tel_no,
                 'booking_type' => $request->type,
-                'booking_timestamp' => $request->start
+                'booking_timestamp' => $request->start,
+                'dob' => $request->dob,
             ],
         );
+
+        if($request->type !== 'TANDEM')
+        {
+            $person_id = People::updateOrCreate(
+                ['first_name' => $request->first_name, 'last_name' => $request->last_name, 'dob' => $request->dob],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'weight' => $request->weight,
+                    'tel_no' => $request->tel_no,
+                    'booking_type' => $request->type,
+                    'booking_timestamp' => $request->start,
+                    'dob' => $request->dob,
+                    'notes' => $request->notes ? $request->notes : '',
+                ],
+            )->id;
+
+            Jumper::updateOrCreate(
+                ['person_id' =>  $person_id],
+                [
+                    'person_id' => $person_id,
+                ],
+            );
+        }
+
         return $booking;
     }
 

@@ -22,6 +22,7 @@ class Booking extends Model
         'weight',
         'booking_timestamp',
         'booking_type',
+        'dob',
     ];
 
     /**
@@ -40,5 +41,6 @@ class Booking extends Model
      */
     protected $casts = [
         'booking_timestamp',
+        'dob',
     ];
 }

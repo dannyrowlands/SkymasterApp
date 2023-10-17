@@ -4,6 +4,7 @@ import _ from 'lodash';
 import setEventsData from '@/pages/Diary/Calender.jsx'
 import moment from "moment";
 
+const MEDICAL_AGE = 40;
 const Booking = (
     {
         auth,
@@ -33,14 +34,22 @@ const Booking = (
         }))
     }
 
+    function alertIfMedicalNeeded(dob)
+    {
+        if(moment().diff(dob, 'years') >= MEDICAL_AGE)
+        {
+            alert('This person requires a medical!')
+        }
+    }
+
     function handleSubmit(e) {
         e.preventDefault()
         let events = JSON.parse(localStorage.getItem('events'))
         values.end = values.start
-        values.title = String(values.start).substr(11,5) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
+        values.title = String(values.start).substr(11,2) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
         if (type === 'ALL')
         {
-            values.title = '(' + values.booking_type.substr(0, 2) + ') ' + String(values.start).substr(11,5) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
+            values.title = '(' + values.booking_type.substr(0, 2) + ') ' + String(values.start).substr(11,2) + ' - ' + values.first_name.substr(0, 1) + ' ' + values.last_name
         }
 
         if (values.id) {
@@ -52,6 +61,7 @@ const Booking = (
             values.booking_type = type
             events.push(values)
         }
+        alertIfMedicalNeeded(values.dob)
         storeDataToDatabase(values)
         storeLocalData(events)
         setEventsData(events)
@@ -68,7 +78,6 @@ const Booking = (
         if (confirm('Do you wish to cancel this booking'))
         {
             if(confirm('Booking will now cancel?')) {
-                console.log(values)
                 let events = JSON.parse(localStorage.getItem('events'))
                 let index = _.findIndex(events, {'id': values.id,})
                 events.splice(index, 1)
@@ -110,19 +119,25 @@ const Booking = (
                             <label htmlFor="email">Email:</label>
                         </div>
                         <div className="py-1 text-left">
-                            <input id="email" defaultValue={values ? values.email : ''} onChange={handleChange} />
+                            <input id="email" defaultValue={values ? values.email : ''} placeholder={'sam@sams.com'} onChange={handleChange} />
                         </div>
                         <div className="py-1 text-left">
                             <label htmlFor="tel_no">Telephone No:</label>
                         </div>
                         <div className="py-1 text-left">
-                            <input id="tel_no" defaultValue={values ? values.tel_no : ''} onChange={handleChange} />
+                            <input id="tel_no" defaultValue={values ? values.tel_no : ''} placeholder={'07777356356'}onChange={handleChange} />
                         </div>
                         <div className="py-1 text-left">
-                            <label htmlFor="weight">Weight:</label>
+                            <label htmlFor="dob">Date of Birth:</label>
                         </div>
                         <div className="py-1 text-left">
-                            <input id="weight" defaultValue={values ? values.weight : ''} onChange={handleChange} />
+                            <input id="dob" defaultValue={values ? values.dob : ''} placeholder={'2020-11-31'} onChange={handleChange} />
+                        </div>
+                        <div className="py-1 text-left">
+                            <label htmlFor="weight">Weight (kg):</label>
+                        </div>
+                        <div className="py-1 text-left">
+                            <input id="weight" defaultValue={values ? values.weight : ''} placeholder={'75'} onChange={handleChange} />
                         </div>
                         <div className="py-1 text-left">
                             <label htmlFor="start">Time:</label>
