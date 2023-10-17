@@ -25,6 +25,7 @@ class JumperResource extends JsonResource
         $array['dob'] = $jumper->person->dob;
         $array['weight'] = $jumper->person->weight;
         $array['email'] = $jumper->person->email;
+        $array['tel_no'] = $jumper->person->tel_no;
         $array['last_updated'] = $jumper->person->updated_at;
         return $array;
     }

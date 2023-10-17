@@ -2,7 +2,14 @@ import React from "react";
 import TableRow from "./TableRow";
 import TableHeadItem from "./TableHead";
 
-const Table = ({ theadData, tbodyData, handleClick, modelName, customClass = 'table' }) => {
+const Table = ({
+                   theadData,
+                   tbodyData,
+                   handleClick,
+                   handleCellClick,
+                   modelName,
+                   customClass = 'table'
+}) => {
 
     return (
         <table className={customClass}>
@@ -15,8 +22,13 @@ const Table = ({ theadData, tbodyData, handleClick, modelName, customClass = 'ta
             </thead>
             <tbody>
             {tbodyData.map((item) => {
-                const object = item.items
-                return <TableRow key={item.id+'-'+Math.floor(Math.random() * 100000)} id={item.id} data={item.items} handleClick={handleClick} modelName={modelName}/>;
+                return<TableRow
+                    key={item.id+'-'+Math.floor(Math.random() * 100000)}
+                    id={item.id} data={item.items}
+                    handleClick={handleClick}
+                    handleCellClick={handleCellClick}
+                    modelName={modelName}
+                />;
             })}
             </tbody>
         </table>

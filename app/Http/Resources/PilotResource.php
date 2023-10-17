@@ -26,6 +26,7 @@ class PilotResource extends JsonResource
         $array['dob'] = $pilot->person->dob;
         $array['weight'] = $pilot->person->weight;
         $array['email'] = $pilot->person->email;
+        $array['tel_no'] = $pilot->person->tel_no;
         $array['last_updated'] = $pilot->person->updated_at;
         return $array;
     }

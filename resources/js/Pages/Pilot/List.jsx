@@ -15,6 +15,11 @@ const List = (
     const modelName = 'Pilot'
     const [tbodyData, setTbodyData] = useState([])
 
+    const handleCellClick = (id, modelName, field, item, e) => {
+        e.stopPropagation()
+        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD-' + field + ' VALUE-' + item)
+    }
+
     const handleClick = (id, modelName) => {
         console.log('CLICKED ' + modelName + ' :: ',id)
     }
@@ -25,10 +30,11 @@ const List = (
                 {
                     id: item.id,
                     items: [
-                        item.full_name,
-                        item.email,
-                        item.dob,
-                        item.last_updated
+                        [ 'name', item.full_name],
+                        [ 'email', item.email],
+                        ['tel_no', item.tel_no],
+                        ['dob', item.dob],
+                        ['updated', item.last_updated]
                     ],
                 }
             )
@@ -39,9 +45,11 @@ const List = (
     const theadData = [
         'Name',
         'Email',
+        'Telephone',
         'Date of Birth',
         'Last Updated'
     ]
+
     return (
         <>
             <AuthenticatedLayout
@@ -60,6 +68,7 @@ const List = (
                                             theadData={theadData}
                                             tbodyData={tbodyData}
                                             handleClick={handleClick}
+                                            handleCellClick={handleCellClick}
                                             modelName={modelName}
                                         />
                                     </div>
