@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Jumper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class KitFactory extends Factory
     public function definition(): array
     {
         return [
-            'jumper_id' => JumperFactory::create()->id,
+            'jumper_id' => Jumper::factory()->create()->id,
             'indentifer' => 'Random Rig',
             'main' => 'Random Main',
             'main_size' => 135,

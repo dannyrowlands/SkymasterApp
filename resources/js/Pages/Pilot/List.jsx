@@ -4,6 +4,7 @@ import _ from 'lodash';
 import setEventsData from '@/pages/Diary/Calender.jsx'
 import moment from "moment";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
+import Table from "@/Components/Table.jsx";
 const List = (
     {
         auth,
@@ -13,6 +14,9 @@ const List = (
     const myList = []
     const [tbodyData, setTbodyData] = useState([])
 
+    const handleClick = (id) => {
+        console.log('CLICKED Pilot :: ',id)
+    }
 
     useEffect(() => {
         let count = 0
@@ -43,7 +47,11 @@ const List = (
                                 <div className="p-6 text-gray-900">
                                     <h1 className='text-center'>Pilots</h1>
                                     <div className='list-container'>
-
+                                        <Table
+                                            theadData={theadData}
+                                            tbodyData={tbodyData}
+                                            handleClick={handleClick}
+                                        />
                                     </div>
                                 </div>
                             </div>

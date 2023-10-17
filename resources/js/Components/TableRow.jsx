@@ -1,8 +1,8 @@
 import React from "react";
 
-const TableRow = ({ data }) => {
+const TableRow = ({ id, data, handleClick }) => {
     return (
-        <tr>
+        <tr onClick={() => handleClick(id)}>
             {data.map((item) => {
                 return <td key={item+Math.floor(Math.random() * 100000)}>{item}</td>;
             })}

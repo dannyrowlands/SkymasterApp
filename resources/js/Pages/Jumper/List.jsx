@@ -13,6 +13,9 @@ const List = (
     const myList = []
     const [tbodyData, setTbodyData] = useState([])
 
+    const handleClick = (id) => {
+        console.log('CLICKED Jumper :: ',id)
+    }
 
     useEffect(() => {
         let count = 0
@@ -20,7 +23,7 @@ const List = (
             count++
             myList.push(
                 {
-                    id: count,
+                    id: jumper.id,
                     items: Object.values(jumper),
                 }
             )
@@ -44,7 +47,11 @@ const List = (
                                 <div className="p-6 text-gray-900">
                                     <h1 className='text-center'>Parachutists</h1>
                                     <div className='list-container'>
-                                        <Table theadData={theadData} tbodyData={tbodyData} />
+                                        <Table
+                                            theadData={theadData}
+                                            tbodyData={tbodyData}
+                                            handleClick={handleClick}
+                                        />
                                     </div>
                                 </div>
                             </div>
