@@ -8,6 +8,7 @@ const Table = ({
                    handleClick,
                    handleCellClick,
                    modelName,
+                   isEditable,
                    customClass = 'table'
 }) => {
 
@@ -28,6 +29,7 @@ const Table = ({
                     handleClick={handleClick}
                     handleCellClick={handleCellClick}
                     modelName={modelName}
+                    isEditable={isEditable}
                 />;
             })}
             </tbody>

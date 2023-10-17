@@ -13,14 +13,21 @@ const List = (
     const myList = []
     const modelName = 'Jumper'
     const [tbodyData, setTbodyData] = useState([])
+    const [isEditable, setIsEditable] = useState(false)
 
-    const handleCellClick = (id, modelName, item, e) => {
+    const handleCellClick = (id, modelName, field, item, e) => {
         e.stopPropagation()
-        console.log('CLICKED ' + modelName + ' :: ',id, item)
+        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD-' + field + ' VALUE-' + item)
+
     }
 
     const handleClick = (id, modelName) => {
         console.log('CLICKED ' + modelName + ' :: ',id)
+    }
+
+    const toggleEdit = () => {
+        setIsEditable(!isEditable)
+        console.log('isEditable::',isEditable)
     }
 
     useEffect(() => {
@@ -29,11 +36,11 @@ const List = (
                 {
                     id: item.id,
                     items: [
-                        item.full_name,
-                        item.email,
-                        item.tel_no,
-                        item.dob,
-                        item.last_updated
+                        ['name', item.full_name],
+                        ['email', item.email],
+                        ['tel_no', item.tel_no],
+                        ['dob', item.dob],
+                        ['updated', item.last_updated]
                     ],
                 }
             )
@@ -55,13 +62,22 @@ const List = (
                 user={auth.user}
                 header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Parachutists</h2>}
             >
-                <Head title="Calender" />
+                <Head title="Parachutists" />
                 <div className='app'>
                     <div className="py-12">
                         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                                {isEditable &&
+                                    <div className={"p-2"}>
+                                        <button className={'button'} onClick={toggleEdit}>[Select View Mode]</button>
+                                    </div>
+                                }
+                                {!isEditable &&
+                                    <div className={"p-2"}>
+                                        <button className={'button'} onClick={toggleEdit}>[Select Edit Mode]</button>
+                                    </div>
+                                }
                                 <div className="p-6 text-gray-900">
-                                    <h1 className='text-center'>Parachutists</h1>
                                     <div className='list-container'>
                                         <Table
                                             theadData={theadData}
@@ -69,6 +85,7 @@ const List = (
                                             handleClick={handleClick}
                                             handleCellClick={handleCellClick}
                                             modelName={modelName}
+                                            isEditable={isEditable}
                                         />
                                     </div>
                                 </div>
