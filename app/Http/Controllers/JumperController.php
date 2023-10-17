@@ -15,7 +15,7 @@ class JumperController extends Controller
      */
     public function showList() : Response
     {
-        $jumpers = JumperResource::collection(Jumper::all());
+        $jumpers = JumperResource::collection(Jumper::paginate(env('TABLE_ROWS_TO_DISPLAY', 20)));
 
         return inertia('Jumper/List', [
             'list' => $jumpers,

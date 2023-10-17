@@ -19,9 +19,7 @@ const List = (
     }
 
     useEffect(() => {
-        console.log(list.data)
         list.data.forEach((item, index) => {
-            console.log('Jumper::',item)
             myList.push(
                 {
                     id: item.id,
@@ -35,7 +33,6 @@ const List = (
             )
         })
         setTbodyData(myList)
-        console.log('myList::',myList)
     },[])
 
     const theadData = [

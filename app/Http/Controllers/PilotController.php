@@ -15,7 +15,7 @@ class PilotController extends Controller
      */
     public function showList() : Response
     {
-        $pilots = PilotResource::collection(Pilot::all());
+        $pilots = PilotResource::collection(Pilot::paginate(env('TABLE_ROWS_TO_DISPLAY', 20)));
 
         return inertia('Pilot/List', [
             'list' => $pilots,
