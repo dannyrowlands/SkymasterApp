@@ -18,16 +18,6 @@ const List = (
     const [showEdit, setShowEdit] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
-    const handleCellClick = (id, modelName, field, item, e) => {
-        e.stopPropagation()
-        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD-' + field + ' VALUE-' + item)
-
-    }
-
-    const handleClick = (id, modelName) => {
-        console.log('CLICKED ' + modelName + ' :: ',id)
-    }
-
     const toggleEdit = () => {
         setIsEditable(!isEditable)
         console.log('isEditable::',isEditable)
@@ -39,11 +29,11 @@ const List = (
                 {
                     id: item.id,
                     items: [
-                        ['name', item.full_name],
-                        ['email', item.email],
-                        ['tel_no', item.tel_no],
-                        ['dob', item.dob],
-                        ['updated', item.last_updated]
+                        ['name', item.full_name, 'text', 'Name', 0],
+                        ['email', item.email, 'email', 'Email', 1],
+                        ['tel_no', item.tel_no, 'telephone', 'Telephone', 1],
+                        ['dob', item.dob, 'date', 'Date of Birth', 1],
+                        ['updated', item.last_updated, 'datetime', 'Last Updated', 0]
                     ],
                 }
             )
@@ -60,10 +50,9 @@ const List = (
     ]
 
     const tEditableData = [
-        'Name',
-        'Email',
-        'Telephone',
-        'Date of Birth',
+        'email',
+        'tel_no',
+        'dob',
     ]
 
     return (
@@ -92,10 +81,9 @@ const List = (
                                         <Table
                                             theadData={theadData}
                                             tbodyData={tbodyData}
-                                            handleClick={handleClick}
-                                            handleCellClick={handleCellClick}
                                             modelName={modelName}
                                             isEditable={isEditable}
+                                            tEditableData={tEditableData}
                                         />
                                     </div>
                                 </div>

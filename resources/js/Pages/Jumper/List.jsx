@@ -11,23 +11,16 @@ const List = (
 ) => {
 
     const myList = []
+    const editableList = []
+    const headList = []
     const modelName = 'Jumper'
     const [tbodyData, setTbodyData] = useState([])
+    const [theadData, setTheadData] = useState([])
+    const [tEditableData, setTEditableData] = useState([])
     const [isEditable, setIsEditable] = useState(false)
-
-    const handleCellClick = (id, modelName, field, item, e) => {
-        e.stopPropagation()
-        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD-' + field + ' VALUE-' + item)
-
-    }
-
-    const handleClick = (id, modelName) => {
-        console.log('CLICKED ' + modelName + ' :: ',id)
-    }
 
     const toggleEdit = () => {
         setIsEditable(!isEditable)
-        console.log('isEditable::',isEditable)
     }
 
     useEffect(() => {
@@ -36,25 +29,27 @@ const List = (
                 {
                     id: item.id,
                     items: [
-                        ['name', item.full_name],
-                        ['email', item.email],
-                        ['tel_no', item.tel_no],
-                        ['dob', item.dob],
-                        ['updated', item.last_updated]
+                        ['name', item.full_name, 'text', 'Name'],
+                        ['email', item.email, 'email', 'Email'],
+                        ['tel_no', item.tel_no, 'telephone', 'Telephone'],
+                        ['dob', item.dob, 'date', 'Date of Birth'],
+                        ['updated', item.last_updated, 'datetime', 'Last Updated']
                     ],
                 }
             )
         })
         setTbodyData(myList)
-    },[])
 
-    const theadData = [
-        'Name',
-        'Email',
-        'Telephone',
-        'Date of Birth',
-        'Last Updated'
-    ]
+        myList.items.forEach((item, index) => {
+            editableList.push(item[0])
+        })
+        setTEditableData(editableList)
+
+        myList.items.forEach((item, index) => {
+            headList.push(item[3])
+        })
+        setTheadData(headList)
+    },[])
 
     return (
         <>
@@ -82,10 +77,9 @@ const List = (
                                         <Table
                                             theadData={theadData}
                                             tbodyData={tbodyData}
-                                            handleClick={handleClick}
-                                            handleCellClick={handleCellClick}
                                             modelName={modelName}
                                             isEditable={isEditable}
+                                            tEditableData={tEditableData}
                                         />
                                     </div>
                                 </div>
