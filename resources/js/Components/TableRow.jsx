@@ -1,5 +1,4 @@
-import React, {useState} from "react";
-import EditableText from "@/Utils/Table/EditableText.jsx";
+import React from "react";
 
 const TableRow = ({
                       id,
@@ -8,13 +7,11 @@ const TableRow = ({
                       handleCellClick,
                       modelName,
                       isEditable,
-                      tEditableData,
                   }) => {
 
     return (
-        <>
             <tr
-                key={id+'-'+Math.floor(Math.random() * 100000)}
+                key={id}
                 onClick={(e) => handleClick(id, modelName, e)}
             >
                 {data.map((item, index) => {
@@ -38,7 +35,6 @@ const TableRow = ({
                     </>
                 })}
             </tr>
-        </>
     );
 };
 

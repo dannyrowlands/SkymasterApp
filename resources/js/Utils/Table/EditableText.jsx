@@ -62,7 +62,6 @@ const EditableText = (
     }
 
     return (
-        <>
             <div className='popup'>
                 <div className="shadow-lg p-3 mb-5 bg-gray-100 rounded">
                     <form onSubmit={handleSubmit}>
@@ -85,7 +84,6 @@ const EditableText = (
                     </form>
                 </div>
             </div>
-        </>
     )
 }
 
