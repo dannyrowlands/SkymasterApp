@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Head, router} from "@inertiajs/react";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import Table from '@/Components/Table.jsx'
-import storeLocalData from '@/Pages/Diary/Calender'
-const List = (
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.jsx'
+import Table from "@/Components/Table.jsx"
+
+const PilotList = (
     {
-        auth,
         list
     }
 ) => {
@@ -26,6 +25,7 @@ const List = (
         )
     })
 
+    const editableList = []
     const headList = []
     const dataModelName = 'People'
     const [tbodyData, setTbodyData] = useState([])
@@ -38,20 +38,17 @@ const List = (
 
     useEffect(() => {
         setTbodyData(myList)
-        localStorage.setItem('jumpers', JSON.stringify(myList))
         myList[0].items.forEach((field, index) => {
             headList.push(field[3])
+            editableList.push(field[4])
         })
         setTheadData(headList)
     },[])
 
+
     return (
-        <>
-            <AuthenticatedLayout
-                user={auth.user}
-                header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Parachutists</h2>}
-            >
-                <Head title="Parachutists" />
+            <>
+                <Head title="Pilots" />
                 <div className='app'>
                     <div className="py-12">
                         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -81,9 +78,8 @@ const List = (
                         </div>
                     </div>
                 </div>
-            </AuthenticatedLayout>
-        </>
+            </>
     )
 }
 
-export default List
+export default PilotList

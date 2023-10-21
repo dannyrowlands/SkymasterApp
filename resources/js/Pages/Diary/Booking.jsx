@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {Head, router} from "@inertiajs/react";
 import _ from 'lodash';
-import setEventsData from '@/pages/Diary/Calender.jsx'
 import moment from "moment";
 
 const MEDICAL_AGE = 40;

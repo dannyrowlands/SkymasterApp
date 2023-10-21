@@ -30,6 +30,7 @@ const TableRow = ({
                             key={index+'-'+id}>{item[1]}
                         </td>}
                         {!isEditable && <td
+                            className={'pointer'}
                             key={index+'-'+id}>{item[1]}
                         </td>}
                     </>

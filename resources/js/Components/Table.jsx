@@ -22,7 +22,7 @@ const Table = ({
         e.stopPropagation()
         setField(item)
         setId(id)
-        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD[0]-' + item[0] + ' VALUE[1]-' + item[1] + ' TYPE[2]-' + item[2] + ' Display Name[3]' + item[3])
+        //console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD[0]-' + item[0] + ' VALUE[1]-' + item[1] + ' TYPE[2]-' + item[2] + ' Display Name[3]' + item[3])
         setIsShowEditableText(true)
     }
 
