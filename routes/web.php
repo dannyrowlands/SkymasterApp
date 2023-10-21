@@ -3,6 +3,7 @@
 use App\Http\Controllers\JumperController;
 use App\Http\Controllers\PilotController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DiaryController;
 use Illuminate\Foundation\Application;
@@ -76,5 +77,11 @@ Route::get(
     '/user/{user}',
     [UserController::class, 'show']
 )->name('user.show')->middleware(['auth', 'verified']);
+
+/* Table Edits */
+Route::post(
+    '/update/{model}/{id}',
+    [UpdateController::class, 'update']
+)->middleware(['auth', 'verified'])->name('table.update');
 
 require __DIR__.'/auth.php';

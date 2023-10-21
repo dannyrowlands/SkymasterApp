@@ -1,22 +1,57 @@
 import React, { useState } from 'react';
-import {Head, router} from "@inertiajs/react";
-import _ from 'lodash';
-import moment from "moment";
 
-const MEDICAL_AGE = 40;
 const EditableText = (
     {
         auth,
-        storeDataToDatabase,
         isShowEditableText,
         setIsShowEditableText,
-        field
+        field,
+        modelName,
+        id,
+        setTbodyData,
     }
 ) => {
+
+    const [values, setValues] = useState(null)
+
+    async function storeDataToDatabase(values, e) {
+        return await axios.post(
+            'update/' + modelName.toLowerCase() + '/' + id,
+            values
+        )
+        .then(function (response) {
+            const myList = JSON.parse(localStorage.getItem('jumpers'))
+            var record = null
+            var outerIndex = myList.map((o) => o.id).indexOf(id)
+            myList[outerIndex].items.forEach((data, index) => {
+                Array.prototype.inArray = function( needle ){
+                    return Array(this).join(",").indexOf(needle) >-1;
+                }
+                if(data.inArray(Object.keys(values)))
+                {
+                    myList[outerIndex].items[index][1] = Object.values(values)[0]
+                }
+            })
+            localStorage.setItem('jumpers', JSON.stringify(myList))
+            setTbodyData(myList)
+        })
+        .catch(function (error) {
+            console.log('ERROR RESPONSE::', error)
+        })
+    }
+
+    function handleChange(e) {
+        const key = e.target.id;
+        const value = e.target.value
+        setValues({
+            [key]: value
+        })
+    }
+
     function handleSubmit(e) {
         e.preventDefault()
         e.stopPropagation()
-        //storeDataToDatabase(values)
+        storeDataToDatabase(values, e)
         setIsShowEditableText(false)
     }
 
@@ -33,10 +68,10 @@ const EditableText = (
                     <form onSubmit={handleSubmit}>
                         <div className="row">
                             <div className="py-1 text-left">
-                                <label htmlFor={field[2]}>{field[3]}:</label>
+                                <label htmlFor={field[0]}>{field[3]}:</label>
                             </div>
                             <div className="py-1 text-left">
-                                <input id={field[2]} defaultValue={field[1]} />
+                                <input id={field[0]} defaultValue={field[1]} onChange={handleChange} />
                             </div>
                         </div>
                         <div className="row">

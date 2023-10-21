@@ -9,16 +9,20 @@ const Table = ({
                    modelName,
                    isEditable,
                    tEditableData,
+                   setTbodyData,
                    customClass = 'table'
 }) => {
+
     const [isShowEditableText, setIsShowEditableText] = useState(false)
     const [field, setField] = useState(null)
+    const [id, setId] = useState(null)
 
     const handleCellClick = (id, item, e) => {
         e.preventDefault()
         e.stopPropagation()
         setField(item)
-        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD-' + item[0] + ' VALUE-' + item)
+        setId(id)
+        console.log('CLICKED ' + modelName + ' :: ID-' + id + ' FIELD[0]-' + item[0] + ' VALUE[1]-' + item[1] + ' TYPE[2]-' + item[2] + ' Display Name[3]' + item[3])
         setIsShowEditableText(true)
     }
 
@@ -31,7 +35,7 @@ const Table = ({
         <>
             <table className={customClass}>
                 <thead>
-                <tr>
+                <tr key="x">
                     {theadData.map((h) => {
                         return <TableHeadItem key={h} item={h} />;
                     })}
@@ -39,9 +43,10 @@ const Table = ({
                 </thead>
                 <tbody>
                 {tbodyData.map((item) => {
-                    return<TableRow
+                    return <TableRow
                         key={item.id+'-'+Math.floor(Math.random() * 100000)}
-                        id={item.id} data={item.items}
+                        id={item.id}
+                        data={item.items}
                         handleClick={handleClick}
                         handleCellClick={handleCellClick}
                         modelName={modelName}
@@ -59,6 +64,9 @@ const Table = ({
                     isShowEditableText={isShowEditableText}
                     setIsShowEditableText={setIsShowEditableText}
                     field={field}
+                    modelName={modelName}
+                    id={id}
+                    setTbodyData={setTbodyData}
                 />}
         </>
     );

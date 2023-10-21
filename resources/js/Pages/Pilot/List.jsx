@@ -1,9 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Head, router} from "@inertiajs/react";
-import _ from 'lodash';
-import setEventsData from '@/pages/Diary/Calender.jsx'
-import Booking from '@/Pages/Diary/Booking.jsx'
-import moment from "moment";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Table from "@/Components/Table.jsx";
 const List = (
@@ -12,48 +8,43 @@ const List = (
         list
     }
 ) => {
+
     const myList = []
-    const modelName = 'Pilot'
+    list.data.forEach((item, index) => {
+        myList.push(
+            {
+                id: item.id,
+                items: [
+                    ['name', item.full_name, 'text', 'Name', 0],
+                    ['email', item.email, 'email', 'Email', 1],
+                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1],
+                    ['dob', item.dob, 'date', 'Date of Birth', 1],
+                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0]
+                ],
+            }
+        )
+    })
+
+    const editableList = []
+    const headList = []
+    const dataModelName = 'People'
     const [tbodyData, setTbodyData] = useState([])
-    const [showEdit, setShowEdit] = useState(false)
+    const [theadData, setTheadData] = useState([])
     const [isEditable, setIsEditable] = useState(false)
 
     const toggleEdit = () => {
         setIsEditable(!isEditable)
-        console.log('isEditable::',isEditable)
     }
 
     useEffect(() => {
-        list.data.forEach((item, index) => {
-            myList.push(
-                {
-                    id: item.id,
-                    items: [
-                        ['name', item.full_name, 'text', 'Name', 0],
-                        ['email', item.email, 'email', 'Email', 1],
-                        ['tel_no', item.tel_no, 'telephone', 'Telephone', 1],
-                        ['dob', item.dob, 'date', 'Date of Birth', 1],
-                        ['updated', item.last_updated, 'datetime', 'Last Updated', 0]
-                    ],
-                }
-            )
-        })
         setTbodyData(myList)
+        myList[0].items.forEach((field, index) => {
+            headList.push(field[3])
+            editableList.push(field[4])
+        })
+        setTheadData(headList)
     },[])
 
-    const theadData = [
-        'Name',
-        'Email',
-        'Telephone',
-        'Date of Birth',
-        'Last Updated'
-    ]
-
-    const tEditableData = [
-        'email',
-        'tel_no',
-        'dob',
-    ]
 
     return (
         <>
@@ -81,9 +72,9 @@ const List = (
                                         <Table
                                             theadData={theadData}
                                             tbodyData={tbodyData}
-                                            modelName={modelName}
+                                            modelName={dataModelName}
                                             isEditable={isEditable}
-                                            tEditableData={tEditableData}
+                                            setTbodyData={setTbodyData}
                                         />
                                     </div>
                                 </div>

@@ -14,26 +14,27 @@ const TableRow = ({
     return (
         <>
             <tr
+                key={id+'-'+Math.floor(Math.random() * 100000)}
                 onClick={(e) => handleClick(id, modelName, e)}
             >
-                {data.map((item) => {
+                {data.map((item, index) => {
                     return <>
-                        {isEditable && tEditableData.indexOf(item[0]) !== -1 && <td
+                        {isEditable && item[4] !== 0 && <td
+                            key={index+'-'+id}
                             className={'pointer font-faint'}
                             onClick={(e) => handleCellClick(
                                 id,
                                 item,
                                 e
                             )}
-                            key={item[1]+'-'+Math.floor(Math.random() * 100000)}>{item[1]}
+                            >{item[1]}
                         </td>}
-                        {isEditable && tEditableData.indexOf(item[0]) === -1 && <td
-                            key={item[1]+'-'+Math.floor(Math.random() * 100000)}>{item[1]}
+                        {isEditable && item[4] === 0 && <td
+                            key={index+'-'+id}>{item[1]}
                         </td>}
                         {!isEditable && <td
-                            key={item[1]+'-'+Math.floor(Math.random() * 100000)}>{item[1]}
+                            key={index+'-'+id}>{item[1]}
                         </td>}
-
                     </>
                 })}
             </tr>

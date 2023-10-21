@@ -11,12 +11,25 @@ const List = (
 ) => {
 
     const myList = []
-    const editableList = []
+    list.data.forEach((item, index) => {
+        myList.push(
+            {
+                id: item.id,
+                items: [
+                    ['name', item.full_name, 'text', 'Name', 0],
+                    ['email', item.email, 'email', 'Email', 1],
+                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1],
+                    ['dob', item.dob, 'date', 'Date of Birth', 1],
+                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0]
+                ],
+            }
+        )
+    })
+
     const headList = []
-    const modelName = 'Jumper'
+    const dataModelName = 'People'
     const [tbodyData, setTbodyData] = useState([])
     const [theadData, setTheadData] = useState([])
-    const [tEditableData, setTEditableData] = useState([])
     const [isEditable, setIsEditable] = useState(false)
 
     const toggleEdit = () => {
@@ -24,29 +37,10 @@ const List = (
     }
 
     useEffect(() => {
-        list.data.forEach((item, index) => {
-            myList.push(
-                {
-                    id: item.id,
-                    items: [
-                        ['name', item.full_name, 'text', 'Name'],
-                        ['email', item.email, 'email', 'Email'],
-                        ['tel_no', item.tel_no, 'telephone', 'Telephone'],
-                        ['dob', item.dob, 'date', 'Date of Birth'],
-                        ['updated', item.last_updated, 'datetime', 'Last Updated']
-                    ],
-                }
-            )
-        })
         setTbodyData(myList)
-
-        myList.items.forEach((item, index) => {
-            editableList.push(item[0])
-        })
-        setTEditableData(editableList)
-
-        myList.items.forEach((item, index) => {
-            headList.push(item[3])
+        localStorage.setItem('jumpers', JSON.stringify(myList))
+        myList[0].items.forEach((field, index) => {
+            headList.push(field[3])
         })
         setTheadData(headList)
     },[])
@@ -77,9 +71,9 @@ const List = (
                                         <Table
                                             theadData={theadData}
                                             tbodyData={tbodyData}
-                                            modelName={modelName}
+                                            modelName={dataModelName}
                                             isEditable={isEditable}
-                                            tEditableData={tEditableData}
+                                            setTbodyData={setTbodyData}
                                         />
                                     </div>
                                 </div>
