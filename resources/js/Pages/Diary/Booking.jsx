@@ -5,7 +5,6 @@ import moment from "moment";
 const MEDICAL_AGE = 40;
 const Booking = (
     {
-        auth,
         type,
         mode,
         event,

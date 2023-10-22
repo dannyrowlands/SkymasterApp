@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop"
-import {differenceInCalendarDays, parseISO, toDate} from 'date-fns'
-import { setAuth, refreshToken } from '@/Pages/Auth/HandleTokens.jsx'
-import {Head, router} from "@inertiajs/react"
+import {Head} from "@inertiajs/react"
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import Booking from '@/Pages/Diary/Booking.jsx'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css"

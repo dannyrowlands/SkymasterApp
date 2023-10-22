@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Head, router} from "@inertiajs/react";
+import {Head} from "@inertiajs/react";
 import Table from "@/Components/Table.jsx"
 
 const PilotList = (
