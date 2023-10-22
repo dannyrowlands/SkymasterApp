@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import PilotList from '@/Components/Jumper/List.jsx'
+import PilotList from '@/Components/Pilot/List.jsx'
 const Pilots = (
     {
         auth,
@@ -13,6 +13,7 @@ const Pilots = (
         >
             <PilotList
                 list={list}
+                shouldBeEditable={true}
             />
         </AuthenticatedLayout>
     )

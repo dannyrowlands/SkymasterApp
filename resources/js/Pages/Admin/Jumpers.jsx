@@ -13,6 +13,7 @@ const Jumpers = (
         >
             <JumperList
                 list={list}
+                shouldBeEditable={true}
             />
         </AuthenticatedLayout>
     )

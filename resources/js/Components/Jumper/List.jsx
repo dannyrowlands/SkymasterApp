@@ -4,7 +4,8 @@ import Table from '@/Components/Table.jsx'
 
 const JumperList = (
     {
-        list
+        list,
+        shouldBeEditable
     }
 ) => {
 

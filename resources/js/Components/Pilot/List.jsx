@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Head, router} from "@inertiajs/react";
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.jsx'
 import Table from "@/Components/Table.jsx"
 
 const PilotList = (
     {
-        list
+        list,
+        shouldBeEditable
     }
 ) => {
+
 
     const myList = []
     list.data.forEach((item, index) => {
@@ -45,7 +46,6 @@ const PilotList = (
         setTheadData(headList)
     },[])
 
-
     return (
             <>
                 <Head title="Pilots" />
@@ -53,12 +53,12 @@ const PilotList = (
                     <div className="py-12">
                         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                                {isEditable &&
+                                {isEditable && shouldBeEditable &&
                                     <div className={"p-2"}>
                                         <button className={'button'} onClick={toggleEdit}>[Select View Mode]</button>
                                     </div>
                                 }
-                                {!isEditable &&
+                                {!isEditable && shouldBeEditable &&
                                     <div className={"p-2"}>
                                         <button className={'button'} onClick={toggleEdit}>[Select Edit Mode]</button>
                                     </div>
