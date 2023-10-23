@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {Head} from "@inertiajs/react";
 import Table from '@/Components/Table.jsx'
 
-const JumperList = (
+const InstructorList = (
     {
         list,
         shouldBeEditable
     }
 ) => {
-    console.log(list)
+
     const myList = []
     list.data.forEach((item, index) => {
         myList.push(
@@ -46,7 +46,7 @@ const JumperList = (
 
     return (
         <>
-            <Head title="Parachutists" />
+            <Head title="Instructors" />
             <div className='app'>
                 <div className="py-12">
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -80,4 +80,4 @@ const JumperList = (
     )
 }
 
-export default JumperList
+export default InstructorList

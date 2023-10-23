@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JumperController;
 use App\Http\Controllers\PilotController;
 use App\Http\Controllers\ProfileController;
@@ -70,6 +71,13 @@ Route::get(
     '/jumpers',
     [JumperController::class, 'showList']
 )->middleware(['auth', 'verified'])->name('jumpers.showList');
+
+
+/* Instructor */
+Route::get(
+    '/instructors',
+    [InstructorController::class, 'showList']
+)->middleware(['auth', 'verified'])->name('instructors.showList');
 
 
 /* User */

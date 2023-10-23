@@ -17,8 +17,10 @@ class JumperFactory extends Factory
      */
     public function definition(): array
     {
+        $types = ['TANDEM','AFF','RAPS', null];
         return [
             'person_id' => People::factory()->create()->id,
+            'instructor_type' => $types[array_rand($types, 1)],
             'created_at' => now()
         ];
     }

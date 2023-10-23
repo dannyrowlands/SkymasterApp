@@ -74,6 +74,11 @@ export default function Authenticated({ user, header, children }) {
                                                 Parachutists
                                             </NavLink>
                                         </div>
+                                        <div className="dropdown-item">
+                                            <NavLink href={'/instructors'} active={route().current('instructor.showList')}>
+                                                Instructors
+                                            </NavLink>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

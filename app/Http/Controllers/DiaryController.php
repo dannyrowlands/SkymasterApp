@@ -41,24 +41,9 @@ class DiaryController extends Controller
      */
     public function booking(Request $request, $type) : Booking
     {
-        $booking = Booking::updateOrCreate(
-            ['id' =>  $request->id],
-            [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'weight' => $request->weight,
-                'tel_no' => $request->tel_no,
-                'booking_type' => $request->type,
-                'booking_timestamp' => $request->start,
-                'dob' => $request->dob,
-            ],
-        );
-
-        if($request->type !== 'TANDEM')
-        {
-            $person_id = People::updateOrCreate(
-                ['first_name' => $request->first_name, 'last_name' => $request->last_name, 'dob' => $request->dob],
+        try{
+            $booking = Booking::updateOrCreate(
+                ['id' =>  $request->id],
                 [
                     'first_name' => $request->first_name,
                     'last_name' => $request->last_name,
@@ -68,16 +53,36 @@ class DiaryController extends Controller
                     'booking_type' => $request->type,
                     'booking_timestamp' => $request->start,
                     'dob' => $request->dob,
-                    'notes' => $request->notes ? $request->notes : '',
-                ],
-            )->id;
-
-            Jumper::updateOrCreate(
-                ['person_id' =>  $person_id],
-                [
-                    'person_id' => $person_id,
                 ],
             );
+
+
+            if($request->type !== 'TANDEM')
+            {
+                $person_id = People::updateOrCreate(
+                    ['first_name' => $request->first_name, 'last_name' => $request->last_name, 'dob' => $request->dob],
+                    [
+                        'first_name' => $request->first_name,
+                        'last_name' => $request->last_name,
+                        'email' => $request->email,
+                        'weight' => $request->weight,
+                        'tel_no' => $request->tel_no,
+                        'booking_type' => $request->type,
+                        'booking_timestamp' => $request->start,
+                        'dob' => $request->dob,
+                        'notes' => $request->notes ? $request->notes : '',
+                    ],
+                )->id;
+
+                Jumper::updateOrCreate(
+                    ['person_id' =>  $person_id],
+                    [
+                        'person_id' => $person_id,
+                    ],
+                );
+            }
+        } catch(\Exception $e) {
+            dd($e->getMessage());
         }
 
         return $booking;
@@ -89,7 +94,11 @@ class DiaryController extends Controller
      */
     public function delete($id) : void
     {
-        $booking = Booking::find($id);
-        $booking->delete();
+        try{
+            $booking = Booking::find($id);
+            $booking->delete();
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }
