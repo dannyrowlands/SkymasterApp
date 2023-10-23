@@ -18,7 +18,12 @@ class InstructorController extends Controller
     public function showList() : Response
     {
         try {
-            $instructors = InstructorResource::collection(Jumper::with('Person')->where('instructor_type', '!=', '')->paginate(env('TABLE_ROWS_TO_DISPLAY', 20)));
+            $instructors = InstructorResource::collection(
+                Jumper::with('Person')
+                    ->where('instructor_type', '!=', '')
+                    ->paginate(env('TABLE_ROWS_TO_DISPLAY', 20)
+                    )
+            );
         } catch(\Exception $e) {
             dd($e->getMessage());
         }

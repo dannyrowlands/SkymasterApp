@@ -16,7 +16,11 @@ class JumperController extends Controller
     public function showList() : Response
     {
         try{
-            $jumpers = JumperResource::collection(Jumper::paginate(env('TABLE_ROWS_TO_DISPLAY', 20)));
+            $jumpers = JumperResource::collection(
+                Jumper::paginate(
+                    env('TABLE_ROWS_TO_DISPLAY', 20)
+                )
+            );
         } catch(\Exception $e) {
             dd($e->getMessage());
         }

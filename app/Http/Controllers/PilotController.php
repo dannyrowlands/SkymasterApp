@@ -16,7 +16,11 @@ class PilotController extends Controller
     public function showList() : Response
     {
         try{
-            $pilots = PilotResource::collection(Pilot::paginate(env('TABLE_ROWS_TO_DISPLAY', 20)));
+            $pilots = PilotResource::collection(
+                Pilot::paginate(
+                    env('TABLE_ROWS_TO_DISPLAY', 20)
+                )
+            );
         } catch(\Exception $e) {
             dd($e->getMessage());
         }
