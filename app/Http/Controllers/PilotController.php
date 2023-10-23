@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PilotResource;
 use App\Models\Pilot;
-use Illuminate\Http\Request;
 use Inertia\Response;
 
 class PilotController extends Controller

@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\InstructorResource;
-use App\Http\Resources\JumperResource;
 use App\Models\Jumper;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Collection;
 use Inertia\Response;
 
 class InstructorController extends Controller
