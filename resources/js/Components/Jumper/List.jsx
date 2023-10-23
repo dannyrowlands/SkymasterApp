@@ -8,7 +8,7 @@ const JumperList = (
         shouldBeEditable
     }
 ) => {
-    console.log(list)
+
     const myList = []
     list.data.forEach((item, index) => {
         myList.push(

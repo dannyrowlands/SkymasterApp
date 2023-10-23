@@ -80,12 +80,6 @@ Route::get(
 )->middleware(['auth', 'verified'])->name('instructors.showList');
 
 
-/* User */
-Route::get(
-    '/user/{user}',
-    [UserController::class, 'show']
-)->name('user.show')->middleware(['auth', 'verified']);
-
 /* Table Edits */
 Route::post(
     '/update/{model}/{id}',
