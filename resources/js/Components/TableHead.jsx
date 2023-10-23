@@ -3,7 +3,9 @@ import table from "@/Components/Table.jsx";
 
 const TableHeadItem = ({ item }) => {
     return (
-        <td title={item}>
+        <td
+            className={'font-semibold'}
+            title={item}>
             {item}
         </td>
     );

@@ -9,3 +9,7 @@
 .pointer {
     cursor: pointer;
 }
+
+.font-faint {
+    color: #437707 !important;
+}
