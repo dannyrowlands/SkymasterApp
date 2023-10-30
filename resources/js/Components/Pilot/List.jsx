@@ -16,11 +16,11 @@ const PilotList = (
             {
                 id: item.id,
                 items: [
-                    ['name', item.full_name, 'text', 'Name', 0, item.person_id],
-                    ['email', item.email, 'email', 'Email', 1, item.person_id],
-                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1, item.person_id],
-                    ['dob', item.dob, 'date', 'Date of Birth', 1, item.person_id],
-                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0, item.person_id]
+                    ['name', item.full_name, 'text', 'Name', 0, item.individual_id],
+                    ['email', item.email, 'email', 'Email', 1, item.individual_id],
+                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1, item.individual_id],
+                    ['dob', item.dob, 'date', 'Date of Birth', 1, item.individual_id],
+                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0, item.individual_id]
                 ],
             }
         )

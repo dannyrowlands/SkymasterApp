@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Individual;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class MedicalFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'individual_id' => Individual::all()->random()->id,
+            'type' => 'TEST',
+            'issued_by' => 'Test Issuer',
+            'expires' => fake()->dateTimeBetween('+1 day', '+12 months'),
+            'created_at' => now()
         ];
     }
 }

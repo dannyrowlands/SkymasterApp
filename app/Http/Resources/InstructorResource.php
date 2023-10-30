@@ -17,11 +17,22 @@ class InstructorResource extends JsonResource
     public function toArray(Request $request) : array
     {
         try {
-            $instructor = Instructor::with('Jumper', 'Jumper.Individual')->findOrFail($this->resource->id);
+            $instructor = Instructor::with(
+                'Jumper',
+                'Jumper.Individual',
+                'Jumper.Individual.Medical'
+            )->findOrFail($this->resource->id);
+
             $array = [];
+            $array['medical_id'] = null;
+            $array['medical_expires'] = null;
             $array['id'] =  $this->resource->id;
-            $array['person_id'] = $this->jumper->individual->id;
-            $array['jumper_id'] = $this->jumper->id;
+            $array['jumper_id'] = $instructor->jumper->id;
+            $array['individual_id'] = $instructor->jumper->individual->id;
+            if($instructor->jumper->individual->medical) {
+                $array['medical_id'] = $instructor->jumper->individual->medical->id;
+                $array['medical_expires'] = $instructor->jumper->individual->medical->expires;
+            }
             $array['first_name'] = $instructor->jumper->individual->first_name;
             $array['last_name'] = $instructor->jumper->individual->last_name;
             $array['full_name'] = ucfirst(strtolower($instructor->jumper->individual->first_name)).' '.ucfirst(strtolower($instructor->jumper->individual->last_name));

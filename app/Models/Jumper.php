@@ -17,7 +17,7 @@ class Jumper extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'person_id',
+        'individual_id',
     ];
 
     /**

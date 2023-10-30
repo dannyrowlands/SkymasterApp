@@ -40,4 +40,12 @@ class Individual extends Model
     {
         return $this->hasOne(Pilot::class);
     }
+
+    /**
+     * @return HasOne
+     */
+    public function medical(): HasOne
+    {
+        return $this->hasOne(Medical::class);
+    }
 }
