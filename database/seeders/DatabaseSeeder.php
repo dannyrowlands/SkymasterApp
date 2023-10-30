@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
         Jumper::factory()->count(15)->create();
         Instructor::factory()->count(5)->create();
         Pilot::factory()->count(2)->create();
-        Medical::factory()->count(10)->create()
+        Medical::factory()->count(10)->create();
     }
 }
