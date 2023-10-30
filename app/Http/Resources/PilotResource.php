@@ -21,7 +21,7 @@ class PilotResource extends JsonResource
 
             $array = [];
             $array['id'] =  $this->resource->id;
-            $array['person_id'] = $pilot->individual->id;
+            $array['individual_id'] = $pilot->individual->id;
             $array['first_name'] = $pilot->individual->first_name;
             $array['last_name'] = $pilot->individual->last_name;
             $array['full_name'] = ucfirst(strtolower($pilot->individual->first_name)).' '.ucfirst(strtolower($pilot->individual->last_name));

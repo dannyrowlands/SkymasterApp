@@ -20,7 +20,7 @@ class JumperResource extends JsonResource
             $jumper = Jumper::with('Individual')->findOrFail($this->resource->id);
             $array = [];
             $array['id'] =  $this->resource->id;
-            $array['person_id'] = $this->individual->id;
+            $array['individual_id'] = $this->individual->id;
             $array['first_name'] = $jumper->individual->first_name;
             $array['last_name'] = $jumper->individual->last_name;
             $array['full_name'] = ucfirst(strtolower($jumper->individual->first_name)).' '.ucfirst(strtolower($jumper->individual->last_name));
