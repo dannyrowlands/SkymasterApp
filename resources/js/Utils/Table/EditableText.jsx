@@ -20,8 +20,9 @@ const EditableText = (
             values
         )
         .then(function (response) {
-            const myList = JSON.parse(localStorage.getItem('jumpers'))
+            const myList = JSON.parse(localStorage.getItem('dataList'))
             var record = null
+            console.log('myList::',myList)
             var outerIndex = myList.map((o) => o.id).indexOf(id)
             myList[outerIndex].items.forEach((data, index) => {
                 Array.prototype.inArray = function( needle ){
@@ -32,7 +33,7 @@ const EditableText = (
                     myList[outerIndex].items[index][1] = Object.values(values)[0]
                 }
             })
-            localStorage.setItem('jumpers', JSON.stringify(myList))
+            localStorage.setItem('dataList', JSON.stringify(myList))
             setTbodyData(myList)
         })
         .catch(function (error) {

@@ -175,7 +175,7 @@ const Calender = ({ auth, bookings, type }) => {
                                             style={{ height: "100vh" }}
                                             onSelectEvent={(event) => handleEventClick(event)}
                                             onDrillDown={(event) => handleDaySelect(event)}
-                                            views={['month', 'agenda']}
+                                            views={['month']}
                                             eventPropGetter={eventStyleGetter}
                                         />
                                     </div>
