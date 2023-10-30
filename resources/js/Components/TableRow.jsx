@@ -11,8 +11,8 @@ const TableRow = ({
 
     return (
             <tr
-                key={id}
-                onClick={(e) => handleClick(id, modelName, e)}
+                key={data[0][5]}
+                onClick={(e) => handleClick(data[0][5], modelName, e)}
             >
                 {data.map((item, index) => {
                     return <>
@@ -20,7 +20,7 @@ const TableRow = ({
                             key={index+'-'+id}
                             className={'pointer font-faint'}
                             onClick={(e) => handleCellClick(
-                                id,
+                                item[5],
                                 item,
                                 e
                             )}

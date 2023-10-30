@@ -9,7 +9,7 @@ class UpdateController extends Controller
 {
     /**
      * @param $type
-     * @return Response
+     * @return String
      */
     public function update(Request $request, String $model, Int $id)
     {
@@ -27,7 +27,7 @@ class UpdateController extends Controller
         }
 
         return json_encode([
-            'Model' => $edit_model,
+            'Updated Model' => $edit_model,
         ]);
     }
 }

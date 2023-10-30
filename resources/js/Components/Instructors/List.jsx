@@ -15,11 +15,12 @@ const InstructorList = (
             {
                 id: item.id,
                 items: [
-                    ['name', item.full_name, 'text', 'Name', 0],
-                    ['email', item.email, 'email', 'Email', 1],
-                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1],
-                    ['dob', item.dob, 'date', 'Date of Birth', 1],
-                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0]
+                    ['name', item.full_name, 'text', 'Name', 0, item.person_id],
+                    ['email', item.email, 'email', 'Email', 1, item.person_id],
+                    ['tel_no', item.tel_no, 'telephone', 'Telephone', 1, item.person_id],
+                    ['dob', item.dob, 'date', 'Date of Birth', 1, item.person_id],
+                    ['updated', item.last_updated, 'datetime', 'Last Updated', 0, item.person_id],
+                //  ['updated', item.last_updated, 'datetime', 'Last Updated', [SHOULD BE EDITABLE], [ID for DATA MODEL]],
                 ],
             }
         )
@@ -39,10 +40,12 @@ const InstructorList = (
     useEffect(() => {
         setTbodyData(myList)
         localStorage.setItem('dataList', JSON.stringify(myList))
-        myList[0].items.forEach((field, index) => {
-            headList.push(field[3])
-            editableList.push(field[4])
-        })
+        if(myList[0]) {
+            myList[0].items.forEach((field, index) => {
+                headList.push(field[3])
+                editableList.push(field[4])
+            })
+        }
         setTheadData(headList)
     },[])
 

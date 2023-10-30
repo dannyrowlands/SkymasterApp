@@ -21,9 +21,7 @@ const EditableText = (
         )
         .then(function (response) {
             const myList = JSON.parse(localStorage.getItem('dataList'))
-            var record = null
-            console.log('myList::',myList)
-            var outerIndex = myList.map((o) => o.id).indexOf(id)
+            var outerIndex = myList.map((o) => o.items[0][5]).indexOf(id)
             myList[outerIndex].items.forEach((data, index) => {
                 Array.prototype.inArray = function( needle ){
                     return Array(this).join(",").indexOf(needle) >-1;

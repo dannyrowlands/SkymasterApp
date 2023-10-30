@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('jumpers', function (Blueprint $table) {
-            $table->text('instructor_type')->nullable();
+        Schema::create('instructors', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('jumper_id')->constrained();
+            $table->text('type');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('jumpers', function (Blueprint $table) {
-            $table->dropColumn('instructor_type');
-        });
+        Schema::dropIfExists('instructors');
     }
 };
