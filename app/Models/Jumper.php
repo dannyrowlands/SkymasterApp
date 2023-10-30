@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Jumper extends Model
 {
@@ -21,11 +21,11 @@ class Jumper extends Model
     ];
 
     /**
-     * Get the person for this jumper.
+     * Get the individual for this jumper.
      */
-    public function person(): BelongsTo
+    public function individual(): BelongsTo
     {
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Individual::class);
     }
 
     /**

@@ -22,8 +22,8 @@ class Pilot extends Model
     /**
      * Get the person for this pilot.
      */
-    public function person(): BelongsTo
+    public function individual(): BelongsTo
     {
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Individual::class);
     }
 }

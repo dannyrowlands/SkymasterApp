@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\People;
+use App\Models\Individual;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +19,7 @@ class JumperFactory extends Factory
     {
         $types = ['TANDEM','AFF','RAPS', null];
         return [
-            'person_id' => People::factory()->create()->id,
-            'instructor_type' => $types[array_rand($types, 1)],
+            'individual_id' => Individual::all()->random()->id,
             'created_at' => now()
         ];
     }

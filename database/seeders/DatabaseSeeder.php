@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Individual;
+use App\Models\Instructor;
+use App\Models\Jumper;
+use App\Models\Pilot;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,10 +16,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         \App\Models\User::factory()->create([
-             'id' => 1,
-             'name' => 'Home User',
-             'email' => 'test@example.com',
-         ]);
+        Individual::factory()->count(20)->create();
+        Jumper::factory()->count(15)->create();
+        Instructor::factory()->count(5)->create();
+        Pilot::factory()->count(2)->create();
     }
 }
