@@ -25,6 +25,7 @@ const InstructorList = (
         )
     })
 
+    const editableList = []
     const headList = []
     const dataModelName = 'People'
     const [tbodyData, setTbodyData] = useState([])
@@ -37,9 +38,10 @@ const InstructorList = (
 
     useEffect(() => {
         setTbodyData(myList)
-        localStorage.setItem('jumpers', JSON.stringify(myList))
+        localStorage.setItem('dataList', JSON.stringify(myList))
         myList[0].items.forEach((field, index) => {
             headList.push(field[3])
+            editableList.push(field[4])
         })
         setTheadData(headList)
     },[])

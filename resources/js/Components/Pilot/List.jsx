@@ -39,6 +39,7 @@ const PilotList = (
 
     useEffect(() => {
         setTbodyData(myList)
+        localStorage.setItem('dataList', JSON.stringify(myList))
         myList[0].items.forEach((field, index) => {
             headList.push(field[3])
             editableList.push(field[4])
