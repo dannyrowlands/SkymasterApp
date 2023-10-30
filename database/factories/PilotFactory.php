@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Individual;
+use App\Models\Pilot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class PilotFactory extends Factory
     public function definition(): array
     {
         return [
-            'individual_id' => Individual::factory()->create()->id,
+            'individual_id' => Individual::all()->random()->id,
             'created_at' => now()
         ];
     }

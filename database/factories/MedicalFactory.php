@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Individual;
+use App\Models\Medical;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
