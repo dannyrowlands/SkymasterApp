@@ -28,7 +28,7 @@ const PilotList = (
 
     const editableList = []
     const headList = []
-    const dataModelName = 'People'
+    const dataModelName = 'Individual'
     const [tbodyData, setTbodyData] = useState([])
     const [theadData, setTheadData] = useState([])
     const [isEditable, setIsEditable] = useState(false)

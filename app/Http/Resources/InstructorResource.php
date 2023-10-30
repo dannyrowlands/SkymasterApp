@@ -17,19 +17,19 @@ class InstructorResource extends JsonResource
     public function toArray(Request $request) : array
     {
         try {
-            $instructor = Instructor::with('Jumper', 'Jumper.Person')->findOrFail($this->resource->id);
+            $instructor = Instructor::with('Jumper', 'Jumper.Individual')->findOrFail($this->resource->id);
             $array = [];
             $array['id'] =  $this->resource->id;
-            $array['person_id'] = $this->jumper->person->id;
+            $array['person_id'] = $this->jumper->individual->id;
             $array['jumper_id'] = $this->jumper->id;
-            $array['first_name'] = $instructor->jumper->person->first_name;
-            $array['last_name'] = $instructor->jumper->person->last_name;
-            $array['full_name'] = ucfirst(strtolower($instructor->jumper->person->first_name)).' '.ucfirst(strtolower($instructor->jumper->person->last_name));
-            $array['dob'] = $instructor->jumper->person->dob;
-            $array['weight'] = $instructor->jumper->person->weight;
-            $array['email'] = $instructor->jumper->person->email;
-            $array['tel_no'] = $instructor->jumper->person->tel_no;
-            $array['last_updated'] = $instructor->jumper->person->updated_at;
+            $array['first_name'] = $instructor->jumper->individual->first_name;
+            $array['last_name'] = $instructor->jumper->individual->last_name;
+            $array['full_name'] = ucfirst(strtolower($instructor->jumper->individual->first_name)).' '.ucfirst(strtolower($instructor->jumper->individual->last_name));
+            $array['dob'] = $instructor->jumper->individual->dob;
+            $array['weight'] = $instructor->jumper->individual->weight;
+            $array['email'] = $instructor->jumper->individual->email;
+            $array['tel_no'] = $instructor->jumper->individual->tel_no;
+            $array['last_updated'] = $instructor->jumper->individual->updated_at;
             return $array;
         } catch(ModelNotFoundException $e) {
             dd('Not found',get_class_methods($e));

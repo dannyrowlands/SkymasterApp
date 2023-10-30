@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pilots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained();
+            $table->foreignId('individual_id')->constrained();
             $table->timestamps();
         });
     }

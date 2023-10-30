@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('medicals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id')->constrained();
+            $table->foreignId('individual_id')->constrained();
             $table->text('type');
             $table->text('issued_by');
             $table->date('expires');

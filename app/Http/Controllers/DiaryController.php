@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jumper;
-use App\Models\People;
+use App\Models\Individual;
 use App\Models\User;
 use App\Models\Booking;
 use Carbon\Carbon;
@@ -59,7 +59,7 @@ class DiaryController extends Controller
 
             if($request->type !== 'TANDEM')
             {
-                $person_id = People::updateOrCreate(
+                $individual_id = Individual::updateOrCreate(
                     ['first_name' => $request->first_name, 'last_name' => $request->last_name, 'dob' => $request->dob],
                     [
                         'first_name' => $request->first_name,
@@ -75,9 +75,9 @@ class DiaryController extends Controller
                 )->id;
 
                 Jumper::updateOrCreate(
-                    ['person_id' =>  $person_id],
+                    ['individual_id' =>  $individual_id],
                     [
-                        'person_id' => $person_id,
+                        'individual_id' => $individual_id,
                     ],
                 );
             }

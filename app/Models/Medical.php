@@ -15,6 +15,6 @@ class Medical extends Model
      */
     public function person(): BelongsTo
     {
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Individual::class);
     }
 }

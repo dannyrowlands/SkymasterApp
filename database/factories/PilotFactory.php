@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\People;
+use App\Models\Individual;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +18,7 @@ class PilotFactory extends Factory
     public function definition(): array
     {
         return [
-            'person_id' => People::factory()->create()->id,
+            'individual_id' => Individual::factory()->create()->id,
             'created_at' => now()
         ];
     }
