@@ -18,8 +18,10 @@ class PilotResource extends JsonResource
     {
         try {
             $pilot = Pilot::with('Person')->findOrFail($this->resource->id);
+
             $array = [];
             $array['id'] =  $this->resource->id;
+            $array['person_id'] = $pilot->person->id;
             $array['first_name'] = $pilot->person->first_name;
             $array['last_name'] = $pilot->person->last_name;
             $array['full_name'] = ucfirst(strtolower($pilot->person->first_name)).' '.ucfirst(strtolower($pilot->person->last_name));
