@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Individual;
+use App\Models\Jumper;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

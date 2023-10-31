@@ -2,14 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Individual;
-use App\Models\Pilot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pilot>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pool>
  */
-class PilotFactory extends Factory
+class PoolFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +17,7 @@ class PilotFactory extends Factory
     public function definition(): array
     {
         return [
-            'individual_id' => Individual::all()->random()->id,
-            'created_at' => now()
+            //
         ];
     }
 }

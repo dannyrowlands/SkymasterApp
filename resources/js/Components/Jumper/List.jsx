@@ -18,7 +18,7 @@ const JumperList = (
                     ['name', item.full_name, 'text', 'Name', 0, item.individual_id],
                     ['email', item.email, 'email', 'Email', 1, item.individual_id],
                     ['tel_no', item.tel_no, 'telephone', 'Telephone', 1, item.individual_id],
-                    ['dob', item.dob, 'date', 'Date of Birth', 1, item.individual_id],
+                    ['expires', item.medical_expires, 'date', 'Medical Due', 0, item.medical_id],
                     ['updated', item.last_updated, 'datetime', 'Last Updated', 0, item.individual_id]
                 ],
             }

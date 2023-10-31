@@ -35,9 +35,10 @@ const EditableText = (
             setTbodyData(myList)
         })
         .catch(function (error) {
-            console.log('ERROR RESPONSE::', error)
             if(error.code === 'ERR_BAD_REQUEST') {
                 window.location.replace("/login")
+            } else {
+                alert('Database save has failed.')
             }
         })
     }

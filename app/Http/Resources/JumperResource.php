@@ -17,10 +17,18 @@ class JumperResource extends JsonResource
     public function toArray(Request $request) : array
     {
         try {
-            $jumper = Jumper::with('Individual')->findOrFail($this->resource->id);
+            $jumper = Jumper::with(
+                'Individual',
+                'Individual.Medical'
+            )->findOrFail($this->resource->id);
+
             $array = [];
             $array['id'] =  $this->resource->id;
             $array['individual_id'] = $this->individual->id;
+            if($jumper->individual->medical) {
+                $array['medical_id'] = $jumper->individual->medical->id;
+                $array['medical_expires'] = $jumper->individual->medical->expires;
+            }
             $array['first_name'] = $jumper->individual->first_name;
             $array['last_name'] = $jumper->individual->last_name;
             $array['full_name'] = ucfirst(strtolower($jumper->individual->first_name)).' '.ucfirst(strtolower($jumper->individual->last_name));

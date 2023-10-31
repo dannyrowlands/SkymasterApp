@@ -17,11 +17,18 @@ class PilotResource extends JsonResource
     public function toArray(Request $request) : array
     {
         try {
-            $pilot = Pilot::with('Individual')->findOrFail($this->resource->id);
+            $pilot = Pilot::with(
+                'Individual',
+                'Individual.Medical'
+            )->findOrFail($this->resource->id);
 
             $array = [];
             $array['id'] =  $this->resource->id;
             $array['individual_id'] = $pilot->individual->id;
+            if($pilot->individual->medical) {
+                $array['medical_id'] = $pilot->individual->medical->id;
+                $array['medical_expires'] = $pilot->individual->medical->expires;
+            }
             $array['first_name'] = $pilot->individual->first_name;
             $array['last_name'] = $pilot->individual->last_name;
             $array['full_name'] = ucfirst(strtolower($pilot->individual->first_name)).' '.ucfirst(strtolower($pilot->individual->last_name));

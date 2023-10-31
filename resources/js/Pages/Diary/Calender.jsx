@@ -36,6 +36,8 @@ const Calender = ({ auth, bookings, type }) => {
             console.log('ERROR RESPONSE::', error)
             if(error.code === 'ERR_BAD_REQUEST') {
                 window.location.replace("/login")
+            } else {
+                alert('Data not saved!')
             }
         })
     }
