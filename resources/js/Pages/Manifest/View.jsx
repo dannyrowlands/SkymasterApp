@@ -8,52 +8,46 @@ import '../../../css/Calendar.css'
 import _ from "lodash"
 
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import MD5 from "crypto-js/md5"
+import configureStore from "@/Utils/ConfigureStore.jsx";
 
+const View = ({ auth, manifests, pool, jumpers, type }) => {
 
-const View = ({ auth, bookings, type }) => {
+    const store = configureStore({
+        manifestsList:
+            [
+                {
+                    id: 1,
+                    data: [
+                        {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
+                        {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
+                        {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
+                        {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
+                    ]
+                },
+                {
+                    id: 2,
+                    data: [
+                        {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
+                        {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
+                        {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
+                        {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
+                    ]
+                },
+                {
+                    id: 3,
+                    data: [
+                        {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
+                        {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
+                        {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
+                        {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
+                    ]
+                }
+            ],
+        pool: pool,
+        jumpers: jumpers,
+    })
 
-    const manifestsList =
-        [
-            {
-                id: 1,
-                data: [
-                    {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
-                    {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
-                    {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
-                    {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
-                ]
-            },
-            {
-                id: 2,
-                data: [
-                    {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
-                    {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
-                    {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
-                    {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
-                ]
-            },
-            {
-                id: 3,
-                data: [
-                    {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
-                    {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
-                    {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
-                    {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
-                ]
-            },
-        ]
-
-    const pool =
-        {
-            id: 1,
-            data: [
-                {id: 1, firstName: "Georgex", lastName: "Smith", job: "writer", salary: 50000},
-                {id: 2, firstName: "Michaelx", lastName: "Handler", job: "DJ", salary: 150000},
-                {id: 3, firstName: "Larryx", lastName: "David", job: "writer", salary: 250000},
-                {id: 4, firstName: "Mindyx", lastName: "Smith", job: "cook", salary: 120000}
-            ]
-        }
+    console.log('state.manifestsList', store.getState().manifestsList, 'MANIFESTS::', manifests, 'POOL::', pool, 'jumpers::', jumpers)
 
 
     const [myEventsList, setMyEventsList] = useState([])
@@ -121,9 +115,9 @@ const View = ({ auth, bookings, type }) => {
             // )
         //})
         //storeLocalData(manifestsList)
-    },[])
+    },[store])
 
-    const [manifestsData, setManifestsData] = useState(manifestsList)
+    const [manifestsData, setManifestsData] = useState(store.getState().manifestsList)
 
     const handleEventClick = event => {
         setSelectedDate(event.start)
@@ -207,7 +201,6 @@ const View = ({ auth, bookings, type }) => {
         return (idStr);
     }
 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -224,12 +217,11 @@ const View = ({ auth, bookings, type }) => {
                                         <DragDropContext onDragEnd={onDragEnd}>
                                             <div className="grid grid-cols-8 gap-4">
                                                 <div className={'col-span-2 p-3'}>
-                                                    <p className="font-bold pb-3">Pool</p>
                                                     <div className="grid grid-cols-4 gap-4">
 
                                                         <Droppable
                                                             className={'pl-6 truncate w-64'}
-                                                            droppableId={pool.id+'drop'+uniqueId().toString()}
+                                                            droppableId={store.getState().pool.id+'drop'+uniqueId().toString()}
                                                             renderClone={(provided, snapshot, rubric) => (
                                                                 <div
                                                                     {...provided.draggableProps}
@@ -237,9 +229,10 @@ const View = ({ auth, bookings, type }) => {
                                                                     ref={provided.innerRef}
                                                                 >
                                                                     <div
-                                                                        key={pool.data[rubric.source.index].id+'x'}
+                                                                        key={store.getState().pool.data[rubric.source.index].id+'x'}
+                                                                        className={'pl-6 truncate w-64'}
                                                                     >
-                                                                        {pool.data[rubric.source.index].firstName + ' ' + pool.data[rubric.source.index].lastName}
+                                                                        {store.getState().pool.data[rubric.source.index].individual.first_name + ' ' + store.getState().pool.data[rubric.source.index].individual.last_name}
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -247,11 +240,12 @@ const View = ({ auth, bookings, type }) => {
                                                             {provided => (
                                                                 <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                                        {pool.data.map((item, index2) => (
+                                                                        <p className="font-bold pb-3">Pool</p>
+                                                                        {store.getState().pool.data.map((item, index2) => (
                                                                             <Draggable
                                                                                 draggableId={item.id+'drag'+uniqueId().toString()}
                                                                                 index={index2}
-                                                                                key={pool.id+item.id}
+                                                                                key={store.getState().pool.id+item.id}
                                                                                 type={"A"}
                                                                             >
                                                                                 {(provided, snapshot) => (
@@ -264,7 +258,7 @@ const View = ({ auth, bookings, type }) => {
                                                                                             key={item.id+'x'}
                                                                                             className={'pl-6 truncate w-64'}
                                                                                         >
-                                                                                            {item.firstName + ' ' + item.lastName}
+                                                                                            {item.individual.first_name + ' ' + item.individual.last_name}
                                                                                         </div>
                                                                                     </div>
                                                                                 )}
@@ -277,11 +271,69 @@ const View = ({ auth, bookings, type }) => {
                                                         </Droppable>
 
                                                 </div>
+
+
+
+
+
+                                                <div className="grid grid-cols-4 gap-4">
+                                                    <Droppable
+                                                        className={'pl-6 truncate w-64'}
+                                                        droppableId={store.getState().pool.id+'drop'+uniqueId().toString()}
+                                                        renderClone={(provided, snapshot, rubric) => (
+                                                            <div
+                                                                {...provided.draggableProps}
+                                                                {...provided.dragHandleProps}
+                                                                ref={provided.innerRef}
+                                                            >
+                                                                <div
+                                                                    key={store.getState().pool.data[rubric.source.index].id+'x'}
+                                                                    className={'pl-6 truncate w-64'}
+                                                                >
+                                                                    {store.getState().pool.data[rubric.source.index].individual.first_name + ' ' + store.getState().pool.data[rubric.source.index].individual.last_name}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    >
+                                                        {provided => (
+                                                            <>
+                                                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                                                    <p className="font-bold pb-3 pt-3">Jumpers</p>
+                                                                    {store.getState().jumpers.map((item, index2) => (
+                                                                        <Draggable
+                                                                            draggableId={item.id+'drag'+uniqueId().toString()}
+                                                                            index={index2}
+                                                                            key={store.getState().pool.id+item.id}
+                                                                            type={"A"}
+                                                                        >
+                                                                            {(provided, snapshot) => (
+                                                                                <div
+                                                                                    {...provided.draggableProps}
+                                                                                    {...provided.dragHandleProps}
+                                                                                    ref={provided.innerRef}
+                                                                                >
+                                                                                    <div
+                                                                                        key={item.id+'x'}
+                                                                                        className={'pl-6 truncate w-64'}
+                                                                                    >
+                                                                                        {item.individual.first_name + ' ' + item.individual.last_name}
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
+                                                                        </Draggable>
+                                                                    ))}
+                                                                </div>
+                                                                {provided.placeholder}
+                                                            </>
+                                                        )}
+                                                    </Droppable>
+                                                </div>
+
                                             </div>
                                             <div className="col-span-6 p-3">
                                                 <p className="font-bold pb-3">Loads</p>
                                                  <div className="grid grid-cols-4 gap-4">
-                                                    {manifestsList.map((manifest, index) => (
+                                                    {store.getState().manifestsList.map((manifest, index) => (
                                                         <div
                                                             className={'bg-slate-50 rounded-lg'}
                                                             key={manifest.id+'div'}
