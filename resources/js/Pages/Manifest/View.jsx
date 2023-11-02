@@ -46,15 +46,12 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
     }
 
     const [state, dispatch] = useReducer(poolReducer, preloadedState);
-    const [manifestsData, setManifestsData] = useState(state.manifestsList)
-    const [poolData, setPoolData] = useState(state.pool)
-    const [jumperData, setJumperData] = useState(state.jumpers)
 
     const handleEventClick = (event, clicked) => {
         console.log('Clicked Jumper ID::', clicked)
     }
 
-    const onDragEnd = useCallback((result) => {
+    async function doDragEnd(result) {
         if (result.reason === "DROP") {
             if (!result.destination) {
                 console.log('no action', result)
@@ -64,29 +61,39 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 result.source.droppableId === "jumpersList"
                 && result.destination.droppableId === "poolList"
             ) {
-                addToPool(result)
-                dispatch({ type: 'pool/added', payload: result })
+                await addToPool(result).then (function (response) {
+                        dispatch({type: 'pool/added', payload: result})
+                        reloadJumperList()
+                    }
+                )
             }
             if(
                 result.source.droppableId === "poolList"
                 && result.destination.droppableId === "jumpersList"
             ) {
-                removeFromPool(result)
-                dispatch({ type: 'pool/removed', payload: result })
+                await removeFromPool(result).then (function (response) {
+                        dispatch({type: 'pool/removed', payload: result})
+                        reloadJumperList()
+                    }
+                )
             }
-            reloadJumperList()
         }
+    }
+
+    const onDragEnd = useCallback((result) => {
+        doDragEnd(result)
     }, []);
 
     async function addToPool(result) {
+        console.log('result.source.index', result.source.index)
         return await axios.post(
             '/pool/add',
             {
-                id : jumperData[result.source.index].id
+                id : state.jumpers[result.source.index].id
             }
         )
             .then(function (response) {
-                console.log('Saved (bool)::',response)
+                console.log('Saved (bool)::',result)
             })
             .catch(function (error) {
                 console.log('ERROR RESPONSE::', error)
@@ -97,14 +104,16 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
     }
 
     async function removeFromPool(result) {
+        console.log('result.source.index', result.source.index)
+        console.log('pool', state.pool)
         return await axios.post(
             '/pool/remove',
             {
-                id : poolData[result.source.index].id
+                id : state.pool[result.source.index].id
             }
         )
             .then(function (response) {
-                console.log('Saved (bool)::',response)
+                console.log('Saved (bool)::',result)
             })
             .catch(function (error) {
                 console.log('ERROR RESPONSE::', error)
@@ -128,11 +137,6 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 }
             })
     }
-
-    useEffect(() => {
-        setPoolData(state.pool)
-        setJumperData(state.jumpers)
-    },[state])
 
     return (
         <AuthenticatedLayout
@@ -162,10 +166,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                     ref={provided.innerRef}
                                                                 >
                                                                     <div
-                                                                        key={poolData[rubric.source.index].id+'x'}
+                                                                        key={state.pool[rubric.source.index].id+'x'+rubric.source.index}
                                                                         className={'pl-6 truncate w-64'}
                                                                     >
-                                                                        {poolData[rubric.source.index].first_name + ' ' + poolData[rubric.source.index].last_name}
+                                                                        {state.pool[rubric.source.index].first_name + ' ' + state.pool[rubric.source.index].last_name + ' ' + rubric.source.index}
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -174,11 +178,11 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                 <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
                                                                         <p className="font-bold pb-3">Ready</p>
-                                                                        {poolData.map((item, index2) => (
+                                                                        {state.pool.map((item, index) => (
                                                                             <Draggable
-                                                                                draggableId={item.id+item.first_name+item.last_name+index2+'pdrag'}
-                                                                                index={index2}
-                                                                                key={item.id+item.first_name+item.last_name+index2+'pdrag'}
+                                                                                draggableId={item.id+item.first_name+item.last_name+item.individual_id+index+'pdrag'}
+                                                                                index={index}
+                                                                                key={item.id+item.first_name+item.last_name+item.individual_id+'pdrag'}
                                                                             >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
@@ -187,10 +191,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                                         ref={provided.innerRef}
                                                                                     >
                                                                                         <div
-                                                                                            key={item.id+'x'}
+                                                                                            key={item.id+'x'+index}
                                                                                             className={'pl-6 truncate w-64'}
                                                                                         >
-                                                                                            {item.first_name + ' ' + item.last_name}
+                                                                                            {item.first_name + ' ' + item.last_name + ' ' + index}
                                                                                         </div>
                                                                                     </div>
                                                                                 )}
@@ -219,10 +223,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                     ref={provided.innerRef}
                                                                 >
                                                                     <div
-                                                                        key={jumperData[rubric.source.index].id+'x'}
+                                                                        key={state.jumpers[rubric.source.index].id+'x'+rubric.source.index}
                                                                         className={'pl-6 truncate w-64'}
                                                                     >
-                                                                        {jumperData[rubric.source.index].first_name + ' ' + jumperData[rubric.source.index].last_name}
+                                                                        {state.jumpers[rubric.source.index].first_name + ' ' + state.jumpers[rubric.source.index].last_name + ' ' +rubric.source.index}
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -231,11 +235,11 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                 <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
                                                                         <p className="font-bold pb-3 pt-3">Parachutists</p>
-                                                                        {state.jumpers.map((item, index2) => (
+                                                                        {state.jumpers.map((item, index) => (
                                                                             <Draggable
-                                                                                draggableId={item.id+item.first_name+item.last_name+index2+'jdrag'}
-                                                                                index={index2}
-                                                                                key={item.id+item.first_name+item.last_name+index2+'jdrag'}
+                                                                                draggableId={item.id+item.first_name+item.last_name+item.individual_id+index+'jdrag'}
+                                                                                index={index}
+                                                                                key={index}
                                                                             >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
@@ -244,10 +248,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                                         ref={provided.innerRef}
                                                                                     >
                                                                                         <div
-                                                                                            key={item.id+'x'}
+                                                                                            key={item.id+'x'+index}
                                                                                             className={'pl-6 truncate w-64'}
                                                                                         >
-                                                                                            {item.first_name + ' ' + item.last_name}
+                                                                                            {item.first_name + ' ' + item.last_name + ' ' + index}
                                                                                         </div>
                                                                                     </div>
                                                                                 )}
@@ -291,12 +295,11 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                     <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
                                                                         <p className="font-bold pb-3">Load {manifest.order}</p>
-                                                                        {manifest.data.map((item, index2) => (
+                                                                        {manifest.data.map((item, index) => (
                                                                             <Draggable
-                                                                                draggableId={manifest.id+'_'+item.id+index2+'_manifest'}
-                                                                                index={index2}
-                                                                                key={manifest.id+'_'+item.id+index2+'_manifest'}
-                                                                                type={"A"}
+                                                                                draggableId={manifest.id+'_'+item.id+index+'_manifest'}
+                                                                                index={index}
+                                                                                key={manifest.id+'_'+item.id+index+'_manifest'}
                                                                             >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
