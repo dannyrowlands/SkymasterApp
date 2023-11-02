@@ -35,4 +35,12 @@ class Jumper extends Model
     {
         return $this->hasMany(Instructor::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function kits(): HasMany
+    {
+        return $this->hasMany(Kit::class);
+    }
 }

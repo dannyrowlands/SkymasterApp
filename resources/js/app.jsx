@@ -5,11 +5,12 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import {Provider} from "react-redux";
-import configureStore from "./Utils/ConfigureStore.jsx";
+import {createStore} from "redux";
+import rootReducer from "@/Reducers/RootReducer.jsx";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Skymaster'
 
-const store = configureStore([])
+const store = createStore(rootReducer, [])
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

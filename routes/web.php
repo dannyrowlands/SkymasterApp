@@ -4,6 +4,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JumperController;
 use App\Http\Controllers\ManifestController;
 use App\Http\Controllers\PilotController;
+use App\Http\Controllers\PoolController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\UserController;
@@ -37,6 +38,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/manifest/view', [ManifestController::class, 'view'])->middleware(['auth', 'verified'])->name('manifest.view');
+Route::get('/manifest/jumpers', [ManifestController::class, 'getJumperList'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
+Route::post('/pool/add', [PoolController::class, 'add'])->middleware(['auth', 'verified'])->name('pool.add');
+Route::post('/pool/remove', [PoolController::class, 'remove'])->middleware(['auth', 'verified'])->name('pool.remove');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
