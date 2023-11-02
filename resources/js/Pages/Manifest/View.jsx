@@ -1,11 +1,9 @@
 import React, {useState, useEffect, useCallback, useReducer} from 'react'
-import moment from "moment"
 import {Head} from "@inertiajs/react"
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import '../../../css/Calendar.css'
-import _ from "lodash"
 
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {createStore} from "redux";
