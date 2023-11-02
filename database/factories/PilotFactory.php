@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Dropzone;
 use App\Models\Individual;
-use App\Models\Pilot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +20,7 @@ class PilotFactory extends Factory
     {
         return [
             'individual_id' => Individual::all()->random()->id,
+            'dropzone_id' => Dropzone::all()->random()->id,
             'created_at' => now()
         ];
     }

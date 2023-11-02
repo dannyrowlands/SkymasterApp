@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Dropzone;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class BookingFactory extends Factory
             'booking_timestamp' => fake()->dateTimeBetween('+1 day', '+1 month'),
             'booking_type' => $types[array_rand($types, 1)],
             'dob' => fake()->date('Y-m-d'),
+            'dropzone_id' => Dropzone::all()->random()->id,
             'created_at' => now()
         ];
     }

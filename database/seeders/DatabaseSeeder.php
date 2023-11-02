@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Booking;
+use App\Models\Dropzone;
 use App\Models\Individual;
 use App\Models\Instructor;
 use App\Models\Jumper;
@@ -19,13 +21,17 @@ class DatabaseSeeder extends Seeder
     {
         Individual::factory()->count(20)->create();
 
+        Dropzone::factory()->count(5)->create();
+
+        Booking::factory()->count(100)->create();
+
         for ($x = 1; $x <= 15; $x++) {
             Jumper::factory()->create([
                 'individual_id' => $x,
             ]);
         }
 
-        Instructor::factory()->count(5)->create();
+        Instructor::factory()->count(15)->create();
 
         for ($x = 1; $x <= 10; $x++) {
             Medical::factory()->create([

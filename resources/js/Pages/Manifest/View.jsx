@@ -1,18 +1,16 @@
 import React, {useState, useEffect, useCallback, useReducer} from 'react'
-import moment from "moment"
 import {Head} from "@inertiajs/react"
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import '../../../css/Calendar.css'
-import _ from "lodash"
 
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import configureStore from "@/Utils/ConfigureStore.jsx";
+import {createStore} from "redux";
+import poolReducer from "@/Reducers/PoolReducer.jsx";
 
 const View = ({ auth, manifests, pool, jumpers, type }) => {
-
-    const store = configureStore({
+    const preloadedState = {
         manifestsList:
             [
                 {
@@ -27,153 +25,33 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 {
                     id: 2,
                     data: [
-                        {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
-                        {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
-                        {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
-                        {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
+                        {id: 5, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
+                        {id: 6, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
+                        {id: 7, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
+                        {id: 8, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
                     ]
                 },
                 {
                     id: 3,
                     data: [
-                        {id: 1, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
-                        {id: 2, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
-                        {id: 3, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
-                        {id: 4, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
+                        {id: 9, firstName: "George", lastName: "Smith", job: "writer", salary: 50000},
+                        {id: 12, firstName: "Michael", lastName: "Handler", job: "DJ", salary: 150000},
+                        {id: 13, firstName: "Larry", lastName: "David", job: "writer", salary: 250000},
+                        {id: 14, firstName: "Mindy", lastName: "Smith", job: "cook", salary: 120000}
                     ]
                 }
             ],
         pool: pool,
         jumpers: jumpers,
-    })
-
-    console.log('state.manifestsList', store.getState().manifestsList, 'MANIFESTS::', manifests, 'POOL::', pool, 'jumpers::', jumpers)
-
-
-    const [myEventsList, setMyEventsList] = useState([])
-
-    async function storeLocalData(events) {
-        return await localStorage.setItem('events', JSON.stringify(events))
     }
 
-    async function storeDataToDatabase(event) {
-        return await axios.post(
-            '/diary/booking/' + type,
-            event
-        )
-        .then(function (response) {
-            console.log('RESPONSE::',response)
-        })
-        .catch(function (error) {
-            console.log('ERROR RESPONSE::', error)
-            if(error.code === 'ERR_BAD_REQUEST') {
-                window.location.replace("/login")
-            }
-        })
-    }
+    const [state, dispatch] = useReducer(poolReducer, preloadedState);
+    const [manifestsData, setManifestsData] = useState(state.manifestsList)
+    const [poolData, setPoolData] = useState(state.pool)
+    const [jumperData, setJumperData] = useState(state.jumpers)
 
-    async function deleteFromDatabase(id) {
-        return await axios.delete(
-            '/diary/booking/' + id
-        )
-        .then(function (response) {
-            console.log('RESPONSE::',response)
-        })
-        .catch(function (error) {
-            console.log('ERROR RESPONSE::', error)
-            if(error.code === 'ERR_BAD_REQUEST') {
-                window.location.replace("/login")
-            }
-        })
-    }
-
-    useEffect(() => {
-        // bookings.forEach((booking, index) => {
-        //     let date = new Date(booking.booking_timestamp)
-        //     let title = String(date).substr(16,2) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
-        //     if (type === 'ALL')
-        //     {
-        //         title = '(' + booking.booking_type.substr(0, 2) + ') ' + String(date).substr(16,2) + ' - ' + booking.first_name.substr(0, 1) + ' ' + booking.last_name
-        //     }
-
-            // manifestsList.push(
-            //     {
-            //         start: date,
-            //         end: date,
-            //         all_day: false,
-            //         first_name: booking.first_name,
-            //         last_name: booking.last_name,
-            //         title: title,
-            //         email: booking.email,
-            //         weight: booking.weight,
-            //         tel_no: booking.tel_no,
-            //         id: booking.id,
-            //         index: index,
-            //         type: booking.booking_type,
-            //         dob: booking.dob,
-            //     }
-            // )
-        //})
-        //storeLocalData(manifestsList)
-    },[store])
-
-    const [manifestsData, setManifestsData] = useState(store.getState().manifestsList)
-
-    const handleEventClick = event => {
-        setSelectedDate(event.start)
-        setMode('Edit')
-        setCurrentEvent(event)
-        setIsShowEdit(current => !current)
-        setIsShowNew(false)
-    }
-
-    const handleDaySelect = event => {
-        if (type !== 'ALL') {
-            setSelectedDate(event)
-            setMode('Add')
-            setIsShowNew(current => !current)
-            setIsShowEdit(false)
-        }
-    }
-
-    const onEventDrop = (data) => {
-        data.event.start = moment(new Date(new Date(data.start))).format("YYYY-MM-DD HH:mm:ss")
-        data.event.end = data.start
-        let events = JSON.parse(localStorage.getItem('events'))
-        let index = _.findIndex(events, {'id': data.event.id,})
-        events[index] = data.event
-        storeLocalData(events)
-        storeDataToDatabase(data.event)
-        setEventsData(events)
-    }
-
-    const eventStyleGetter = (event) => {
-        var backgroundColor = '#ee9c9c'
-        if(event.type === 'RAPS')
-        {
-            backgroundColor = '#81a2c2'
-        }
-
-        if(event.type === 'TANDEM')
-        {
-            backgroundColor = '#81c283'
-        }
-
-        if(event.type === 'AFF')
-        {
-            backgroundColor = '#c2c081'
-        }
-        var style = {
-            backgroundColor: backgroundColor,
-            borderRadius: '0px',
-            opacity: 0.8,
-            color: 'black',
-            border: '0px',
-            display: 'block'
-        };
-        return {
-            style: style
-        };
+    const handleEventClick = (event, clicked) => {
+        console.log('Clicked Jumper ID::', clicked)
     }
 
     const onDragEnd = useCallback((result) => {
@@ -182,24 +60,79 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 console.log('no action', result)
                 return;
             }
-            console.log('Action Ready', result)
+            if(
+                result.source.droppableId === "jumpersList"
+                && result.destination.droppableId === "poolList"
+            ) {
+                addToPool(result)
+                dispatch({ type: 'pool/added', payload: result })
+            }
+            if(
+                result.source.droppableId === "poolList"
+                && result.destination.droppableId === "jumpersList"
+            ) {
+                removeFromPool(result)
+                dispatch({ type: 'pool/removed', payload: result })
+            }
+            reloadJumperList()
         }
     }, []);
 
-    function uniqueId() {
-        // desired length of Id
-        var idStrLen = 32;
-        // always start with a letter -- base 36 makes for a nice shortcut
-        var idStr = (Math.floor((Math.random() * 25)) + 10).toString(36) + "_";
-        // add a timestamp in milliseconds (base 36 again) as the base
-        idStr += (new Date()).getTime().toString(36) + "_";
-        // similar to above, complete the Id using random, alphanumeric characters
-        do {
-            idStr += (Math.floor((Math.random() * 35))).toString(36);
-        } while (idStr.length < idStrLen);
-
-        return (idStr);
+    async function addToPool(result) {
+        return await axios.post(
+            '/pool/add',
+            {
+                id : jumperData[result.source.index].id
+            }
+        )
+            .then(function (response) {
+                console.log('Saved (bool)::',response)
+            })
+            .catch(function (error) {
+                console.log('ERROR RESPONSE::', error)
+                if(error.code === 'ERR_BAD_REQUEST') {
+                    window.location.replace("/login")
+                }
+            })
     }
+
+    async function removeFromPool(result) {
+        return await axios.post(
+            '/pool/remove',
+            {
+                id : poolData[result.source.index].id
+            }
+        )
+            .then(function (response) {
+                console.log('Saved (bool)::',response)
+            })
+            .catch(function (error) {
+                console.log('ERROR RESPONSE::', error)
+                if(error.code === 'ERR_BAD_REQUEST') {
+                    window.location.replace("/login")
+                }
+            })
+    }
+
+    async function  reloadJumperList() {
+        return await axios.get(
+            '/manifest/jumpers'
+        )
+            .then(function (response) {
+                dispatch({ type: 'jumpers/loaded', payload: response })
+            })
+            .catch(function (error) {
+                console.log('ERROR RESPONSE::', error)
+                if(error.code === 'ERR_BAD_REQUEST') {
+                    window.location.replace("/login")
+                }
+            })
+    }
+
+    useEffect(() => {
+        setPoolData(state.pool)
+        setJumperData(state.jumpers)
+    },[state])
 
     return (
         <AuthenticatedLayout
@@ -221,7 +154,7 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
 
                                                         <Droppable
                                                             className={'pl-6 truncate w-64'}
-                                                            droppableId={store.getState().pool.id+'drop'+uniqueId().toString()}
+                                                            droppableId={'poolList'}
                                                             renderClone={(provided, snapshot, rubric) => (
                                                                 <div
                                                                     {...provided.draggableProps}
@@ -229,10 +162,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                     ref={provided.innerRef}
                                                                 >
                                                                     <div
-                                                                        key={store.getState().pool.data[rubric.source.index].id+'x'}
+                                                                        key={poolData[rubric.source.index].id+'x'}
                                                                         className={'pl-6 truncate w-64'}
                                                                     >
-                                                                        {store.getState().pool.data[rubric.source.index].individual.first_name + ' ' + store.getState().pool.data[rubric.source.index].individual.last_name}
+                                                                        {poolData[rubric.source.index].first_name + ' ' + poolData[rubric.source.index].last_name}
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -240,13 +173,12 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                             {provided => (
                                                                 <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                                        <p className="font-bold pb-3">Pool</p>
-                                                                        {store.getState().pool.data.map((item, index2) => (
+                                                                        <p className="font-bold pb-3">Ready</p>
+                                                                        {poolData.map((item, index2) => (
                                                                             <Draggable
-                                                                                draggableId={item.id+'drag'+uniqueId().toString()}
+                                                                                draggableId={item.id+item.first_name+item.last_name+index2+'pdrag'}
                                                                                 index={index2}
-                                                                                key={store.getState().pool.id+item.id}
-                                                                                type={"A"}
+                                                                                key={item.id+item.first_name+item.last_name+index2+'pdrag'}
                                                                             >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
@@ -258,7 +190,7 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                                             key={item.id+'x'}
                                                                                             className={'pl-6 truncate w-64'}
                                                                                         >
-                                                                                            {item.individual.first_name + ' ' + item.individual.last_name}
+                                                                                            {item.first_name + ' ' + item.last_name}
                                                                                         </div>
                                                                                     </div>
                                                                                 )}
@@ -270,101 +202,40 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                             )}
                                                         </Droppable>
 
-                                                </div>
+                                                    </div>
 
 
 
 
 
-                                                <div className="grid grid-cols-4 gap-4">
-                                                    <Droppable
-                                                        className={'pl-6 truncate w-64'}
-                                                        droppableId={store.getState().pool.id+'drop'+uniqueId().toString()}
-                                                        renderClone={(provided, snapshot, rubric) => (
-                                                            <div
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                                ref={provided.innerRef}
-                                                            >
+                                                    <div className="grid grid-cols-4 gap-4">
+                                                        <Droppable
+                                                            className={'pl-6 truncate w-64'}
+                                                            droppableId={'jumpersList'}
+                                                            renderClone={(provided, snapshot, rubric) => (
                                                                 <div
-                                                                    key={store.getState().pool.data[rubric.source.index].id+'x'}
-                                                                    className={'pl-6 truncate w-64'}
+                                                                    {...provided.draggableProps}
+                                                                    {...provided.dragHandleProps}
+                                                                    ref={provided.innerRef}
                                                                 >
-                                                                    {store.getState().pool.data[rubric.source.index].individual.first_name + ' ' + store.getState().pool.data[rubric.source.index].individual.last_name}
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    >
-                                                        {provided => (
-                                                            <>
-                                                                <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                                    <p className="font-bold pb-3 pt-3">Jumpers</p>
-                                                                    {store.getState().jumpers.map((item, index2) => (
-                                                                        <Draggable
-                                                                            draggableId={item.id+'drag'+uniqueId().toString()}
-                                                                            index={index2}
-                                                                            key={store.getState().pool.id+item.id}
-                                                                            type={"A"}
-                                                                        >
-                                                                            {(provided, snapshot) => (
-                                                                                <div
-                                                                                    {...provided.draggableProps}
-                                                                                    {...provided.dragHandleProps}
-                                                                                    ref={provided.innerRef}
-                                                                                >
-                                                                                    <div
-                                                                                        key={item.id+'x'}
-                                                                                        className={'pl-6 truncate w-64'}
-                                                                                    >
-                                                                                        {item.individual.first_name + ' ' + item.individual.last_name}
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
-                                                                        </Draggable>
-                                                                    ))}
-                                                                </div>
-                                                                {provided.placeholder}
-                                                            </>
-                                                        )}
-                                                    </Droppable>
-                                                </div>
-
-                                            </div>
-                                            <div className="col-span-6 p-3">
-                                                <p className="font-bold pb-3">Loads</p>
-                                                 <div className="grid grid-cols-4 gap-4">
-                                                    {store.getState().manifestsList.map((manifest, index) => (
-                                                        <div
-                                                            className={'bg-slate-50 rounded-lg'}
-                                                            key={manifest.id+'div'}
-                                                        >
-
-                                                            <Droppable
-                                                                droppableId={manifest.id+'drop'+uniqueId().toString()}
-                                                                renderClone={(provided, snapshot, rubric) => (
                                                                     <div
-                                                                        {...provided.draggableProps}
-                                                                        {...provided.dragHandleProps}
-                                                                        ref={provided.innerRef}
+                                                                        key={jumperData[rubric.source.index].id+'x'}
+                                                                        className={'pl-6 truncate w-64'}
                                                                     >
-                                                                        <div
-                                                                            key={manifest.data[rubric.source.index].id+'x'}
-                                                                            className={'pl-6 truncate w-48'}
-                                                                        >
-                                                                            {manifest.data[rubric.source.index].firstName + ' ' + manifest.data[rubric.source.index].id}
-                                                                        </div>
+                                                                        {jumperData[rubric.source.index].first_name + ' ' + jumperData[rubric.source.index].last_name}
                                                                     </div>
-                                                                )}
-                                                            >
-                                                                {provided => (
-                                                                    <>
+                                                                </div>
+                                                            )}
+                                                        >
+                                                            {provided => (
+                                                                <>
                                                                     <div ref={provided.innerRef} {...provided.droppableProps}>
-                                                                        {manifest.data.map((item, index2) => (
+                                                                        <p className="font-bold pb-3 pt-3">Parachutists</p>
+                                                                        {state.jumpers.map((item, index2) => (
                                                                             <Draggable
-                                                                                draggableId={item.id+'drag'+uniqueId().toString()}
+                                                                                draggableId={item.id+item.first_name+item.last_name+index2+'jdrag'}
                                                                                 index={index2}
-                                                                                key={manifest.id+item.id}
-                                                                                type={"A"}
+                                                                                key={item.id+item.first_name+item.last_name+index2+'jdrag'}
                                                                             >
                                                                                 {(provided, snapshot) => (
                                                                                     <div
@@ -374,7 +245,69 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                                                     >
                                                                                         <div
                                                                                             key={item.id+'x'}
-                                                                                            className={'pl-6 truncate w-48'}
+                                                                                            className={'pl-6 truncate w-64'}
+                                                                                        >
+                                                                                            {item.first_name + ' ' + item.last_name}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                )}
+                                                                            </Draggable>
+                                                                        ))}
+                                                                    </div>
+                                                                    {provided.placeholder}
+                                                                </>
+                                                            )}
+                                                        </Droppable>
+                                                    </div>
+
+                                            </div>
+                                            <div className="col-span-6">
+
+                                                 <div className="grid grid-cols-4 gap-4">
+                                                    {manifestsData.map((manifest, index) => (
+                                                        <div
+                                                            className={'bg-slate-50 rounded-lg p-3'}
+                                                            key={manifest.id+'_div'}
+                                                        >
+
+                                                            <Droppable
+                                                                droppableId={manifest.id+'_manifest'}
+                                                                renderClone={(provided, snapshot, rubric) => (
+                                                                    <div
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                        ref={provided.innerRef}
+                                                                    >
+                                                                        <div
+                                                                            key={manifest.data[rubric.source.index].id+'x'}
+                                                                            className={'truncate w-48'}
+                                                                        >
+                                                                            {manifest.data[rubric.source.index].firstName + ' ' + manifest.data[rubric.source.index].id}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            >
+                                                                {provided => (
+                                                                    <>
+                                                                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                                                                        <p className="font-bold pb-3">Load {manifest.order}</p>
+                                                                        {manifest.data.map((item, index2) => (
+                                                                            <Draggable
+                                                                                draggableId={manifest.id+'_'+item.id+index2+'_manifest'}
+                                                                                index={index2}
+                                                                                key={manifest.id+'_'+item.id+index2+'_manifest'}
+                                                                                type={"A"}
+                                                                            >
+                                                                                {(provided, snapshot) => (
+                                                                                    <div
+                                                                                        {...provided.draggableProps}
+                                                                                        {...provided.dragHandleProps}
+                                                                                        ref={provided.innerRef}
+                                                                                    >
+                                                                                        <div
+                                                                                            key={item.id+'_x'}
+                                                                                            className={'truncate w-48'}
+                                                                                            onClick={(e) => handleEventClick(e, item.id)}
                                                                                         >
                                                                                             {item.firstName + ' ' + item.id}
                                                                                         </div>
@@ -389,18 +322,18 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                                                             </Droppable>
 
                                                         </div>
-                                                        ))}
-                                                    </div>
+                                                    ))}
                                                 </div>
                                             </div>
-                                        </DragDropContext>
+                                        </div>
+                                    </DragDropContext>
 
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </AuthenticatedLayout>
     )
 

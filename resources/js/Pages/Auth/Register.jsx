@@ -12,6 +12,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        dropzone_id: 1,
     });
 
     useEffect(() => {
@@ -31,6 +32,23 @@ export default function Register() {
             <Head title="Register" />
 
             <form onSubmit={submit}>
+                <div>
+                    <InputLabel htmlFor="dropzone_id" value="dropzone_id" />
+
+                    <TextInput
+                        id="dropzone_id"
+                        name="dropzone_id"
+                        value={data.dropzone_id}
+                        className="mt-1 block w-full"
+                        autoComplete="dropzone_id"
+                        isFocused={true}
+                        onChange={(e) => setData('dropzone_id', e.target.value)}
+                        required
+                    />
+
+                    <InputError message={errors.dropzone_id} className="mt-2" />
+                </div>
+
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 
