@@ -1,31 +1,46 @@
-import { useEffect } from 'react';
+import {useEffect, useReducer} from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import Dropdown from 'react-dropdown';
+import '../../../css/react-dropdown-style.css';
 
-export default function Register() {
+export default function Register(
+    {dropzones}
+) {
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
-        dropzone_id: 1,
+        dropzone_id: 0,
     });
 
     useEffect(() => {
+        console.log('dropzones',dropzones)
         return () => {
-            reset('password', 'password_confirmation');
+            reset('password', 'password_confirmation', 'dropzone_id');
         };
     }, []);
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route('register'));
     };
+
+    let options = []
+    for (const dropzone of dropzones) {
+        options.push({
+            value: dropzone.id,
+            label: dropzone.name,
+        })
+    }
+
+    const defaultOption = options[0];
 
     return (
         <GuestLayout>
@@ -33,23 +48,23 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="dropzone_id" value="dropzone_id" />
+                    <InputLabel htmlFor="dropzone_id" value="Parachute Center" className={"font-bold"} />
 
-                    <TextInput
+                    <Dropdown
                         id="dropzone_id"
                         name="dropzone_id"
-                        value={data.dropzone_id}
-                        className="mt-1 block w-full"
-                        autoComplete="dropzone_id"
-                        isFocused={true}
-                        onChange={(e) => setData('dropzone_id', e.target.value)}
+                        options={options}
+                        value={''}
+                        className={"mt-1 block w-full shadow-sm dropdown-skymaster border-gray-300 rounded-md"}
+                        onChange={(e) => setData('dropzone_id', e.value)}
+                        placeholder="Select an option"
                         required
                     />
 
                     <InputError message={errors.dropzone_id} className="mt-2" />
                 </div>
 
-                <div>
+                <div className="mt-4">
                     <InputLabel htmlFor="name" value="Name" />
 
                     <TextInput
