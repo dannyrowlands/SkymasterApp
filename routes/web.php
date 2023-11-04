@@ -39,6 +39,8 @@ Route::get('/dashboard', function () {
 
 Route::get('/manifest/view', [ManifestController::class, 'view'])->middleware(['auth', 'verified'])->name('manifest.view');
 Route::get('/manifest/jumpers', [ManifestController::class, 'getJumperList'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
+Route::get('/manifest/pool', [ManifestController::class, 'getPoolList'])->middleware(['auth', 'verified'])->name('manifest.poollist');
+Route::post('/manifest/set_details', [ManifestController::class, 'setManifestDetails'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
 Route::post('/pool/add', [PoolController::class, 'add'])->middleware(['auth', 'verified'])->name('pool.add');
 Route::post('/pool/remove', [PoolController::class, 'remove'])->middleware(['auth', 'verified'])->name('pool.remove');
 

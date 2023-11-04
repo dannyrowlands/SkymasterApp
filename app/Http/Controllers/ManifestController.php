@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jumper;
+use App\Models\ManifestDetails;
 use App\Models\Pool;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
@@ -15,11 +17,16 @@ class ManifestController extends Controller
     {
         return inertia('Manifest/View', [
             'manifests' => $this->getManifestsData(),
-            'pool' => $this->getPoolData(),
+            'pool' => $this->getPoolItems(),
             'jumpers' => $this->getJumpers(),
             'type' => 'std'
         ]);
 
+    }
+
+    public function getPoolList()
+    {
+        return $this->getPoolItems();
     }
 
     public function getJumperList()
@@ -27,27 +34,21 @@ class ManifestController extends Controller
         return $this->getJumpers();
     }
 
-    /**
-     * @return array
-     */
-    private function getPoolData(): array
+    public function setManifestDetails(Request $request)
     {
-        try{
-            $this->getPool();
-            $pool_response_array = [];
-            if((!is_null($this->pool))) {
-//                $this->pool->id_list = json_encode([1,2,3,4,5,6,7,8,9,10]);
-//                $this->pool->save();
-//                dd($this->pool->id_list);
-                foreach (json_decode($this->pool->id_list, true) as $id) {
-                    $jumper = Jumper::join('individuals', 'individuals.id', '=', 'jumpers.individual_id')->findOrFail($id);
-                    $pool_response_array[] = $jumper;
-                }
-            }
-            return $pool_response_array;
-        } catch(\Exception $e) {
-            dd($e->getMessage());
+        $count = 0;
+        foreach ($request->poolState as $jumper)
+        {
+            //dd($request->poolState);
+            ManifestDetails::updateOrCreate(
+                ['jumper_id' =>  $jumper['id']],
+                [
+                    'sequence' => $count,
+                ]
+            );
+            $count++;
         }
+
     }
 
     private function getJumpers()
@@ -56,14 +57,51 @@ class ManifestController extends Controller
             $this->getPool();
             if((!is_null($this->pool))) {
                 $data = Jumper::whereNotIn('jumpers.id', json_decode($this->pool->id_list, true))
-                    ->join('individuals', 'individuals.id', '=', 'jumpers.individual_id')
-                    ->orderBy('individuals.last_name', 'ASC')->orderBy('individuals.first_name', 'ASC')
+                ->with(
+                    'Individual',
+                    'Individual.Medical',
+                    'ManifestDetails'
+                )
+                    //->orderBy('Individual.last_name', 'ASC')->orderBy('Individual.first_name', 'ASC')
                     ->get();
                 return $data;
             }
-            return Jumper::join('individuals', 'individuals.id', '=', 'jumpers.individual_id')
-                ->orderBy('individuals.last_name', 'ASC')->orderBy('individuals.first_name', 'ASC')
+            return Jumper::
+                with(
+                    'Individual',
+                    'Individual.Medical',
+                    'ManifestDetails'
+                )
+                //->orderBy('Individual.last_name', 'ASC')->orderBy('Individual.first_name', 'ASC')
                 ->get();
+        } catch(\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    private function getPoolItems()
+    {
+        try{
+            $this->getPool();
+            $sortedData = [];
+            if((!is_null($this->pool))) {
+                $data = ManifestDetails::whereIn('jumper_id', json_decode($this->pool->id_list, true))
+                    ->orderBy('sequence', 'ASC')
+                    ->orderBy('group_identifier', 'ASC')
+                    ->get();
+
+                foreach($data as $item)
+                {
+                    $sortedData[] = Jumper::where('id', $item->jumper_id)
+                    ->with(
+                        'Individual',
+                        'Individual.Medical',
+                        'ManifestDetails'
+                    )
+                    ->first();
+                }
+            }
+            return $sortedData;
         } catch(\Exception $e) {
             dd($e->getMessage());
         }

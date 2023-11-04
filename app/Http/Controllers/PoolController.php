@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ManifestDetails;
 use App\Models\Pool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class PoolController extends Controller
     {
         try {
             $this->getOrCreatePool();
+            $this->setUpManifestDetails($request);
             $list = [];
             if ($this->pool->id_list) {
                 $list = json_decode($this->pool->id_list, true);
@@ -58,6 +60,20 @@ class PoolController extends Controller
                 'dropzone_id' => Auth::user()->dropzone_id
             ],
             ['id_list' => json_encode([])]
+        );
+    }
+
+    private function setUpManifestDetails(Request $request)
+    {
+        ManifestDetails::updateOrCreate(
+            [
+                'jumper_id' => $request->id,
+            ],
+            [
+                'sequence' => $request->sequence,
+                'group_identifier' => $request->group_identifier,
+                'note' => $request->note,
+            ]
         );
     }
 }

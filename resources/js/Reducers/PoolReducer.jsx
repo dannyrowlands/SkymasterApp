@@ -2,9 +2,10 @@
 
 // Use the initialState as a default value
 export default function poolReducer(state, action) {
+    var statePool = []
     switch (action.type) {
         case 'jumpers/loaded' : {
-            console.log('RUNNING JUMPERS/LOADED',action.payload.data)
+            console.log('loading jumpers')
             return {
                 ...state,
                 jumpers: action.payload.data,
@@ -12,26 +13,46 @@ export default function poolReducer(state, action) {
         }
 
         case 'pool/added': {
+            statePool = state.pool
+            statePool.splice(action.payload.destination.index, 0, state.jumpers[action.payload.source.index]);
             return {
                 ...state,
-                pool: [
-                    ...state.pool,
-                    state.jumpers[action.payload.source.index]
-                ],
+                pool: statePool
+            }
+        }
 
+        case 'pool/moved': {
+            console.log('Running Pool Moved Slice')
+            statePool = state.pool;
+            if( action.payload.source.index === action.payload.destination.index ) return state;
+            var target = statePool[action.payload.source.index];
+            var increment = action.payload.destination.index < action.payload.source.index ? -1 : 1;
+
+            for(var k = action.payload.source.index; k !== action.payload.destination.index; k += increment){
+                statePool[k] = state.pool[k + increment];
+            }
+            statePool[action.payload.destination.index] = target;
+            return {
+                ...state,
+                pool: statePool
             }
         }
 
         case 'pool/removed': {
-            var array = state.pool
-            array.splice(action.payload.source.index, 1)
+            const arr = state.pool.filter(function(item) {
+                return item !== state.pool[action.payload.source.index]
+            })
             return {
                 ...state,
-                pool: array,
-                jumpers:[
-                    ...state.jumpers,
-                    state.jumpers[action.payload.source.index]
-                ]
+                pool: arr
+            }
+        }
+
+        case 'pool/reloaded': {
+            console.log('action', action)
+            return {
+                ...state,
+                pool: action.payload.data
             }
         }
 
