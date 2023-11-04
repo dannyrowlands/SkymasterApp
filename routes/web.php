@@ -37,19 +37,19 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/manifest/view', [ManifestController::class, 'view'])->middleware(['auth', 'verified'])->name('manifest.view');
-Route::get('/manifest/jumpers', [ManifestController::class, 'getJumperList'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
-Route::get('/manifest/pool', [ManifestController::class, 'getPoolList'])->middleware(['auth', 'verified'])->name('manifest.poollist');
-Route::post('/manifest/set_details', [ManifestController::class, 'setManifestDetails'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
-Route::post('/pool/add', [PoolController::class, 'add'])->middleware(['auth', 'verified'])->name('pool.add');
-Route::post('/pool/remove', [PoolController::class, 'remove'])->middleware(['auth', 'verified'])->name('pool.remove');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/* Manifest */
+Route::get('/manifest/view', [ManifestController::class, 'view'])->middleware(['auth', 'verified'])->name('manifest.view');
+Route::get('/manifest/jumpers', [ManifestController::class, 'getJumperList'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
+Route::get('/manifest/pool', [ManifestController::class, 'getPoolList'])->middleware(['auth', 'verified'])->name('manifest.poollist');
+Route::post('/manifest/set_details', [ManifestController::class, 'setManifestDetails'])->middleware(['auth', 'verified'])->name('manifest.jumperlist');
+Route::post('/pool/add', [PoolController::class, 'add'])->middleware(['auth', 'verified'])->name('pool.add');
+Route::post('/pool/remove', [PoolController::class, 'remove'])->middleware(['auth', 'verified'])->name('pool.remove');
 
 /* Dairy */
 Route::get(
