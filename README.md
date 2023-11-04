@@ -6,12 +6,15 @@ I chose this method to keep all in one codebase and not need to build an API tha
 
 You can run this in Docker using the usual Laravel Sail commands.
 
-Steps required - 
-Download repo
-Install Docker Desktop
-Install Composer
-Navigate to root of project
-* Run the following - 
+**Preparation Steps required -** 
+* Download repo
+* Install Docker Desktop
+* Install Composer
+
+Then navigate to root of project
+
+
+**Run the following -** 
 * * `composer install` bb
 * * `npm install` (you may need to add `--legacy-peer-deps` to this command for it to run successfully)
 * * `npm run build`
