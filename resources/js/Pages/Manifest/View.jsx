@@ -54,7 +54,7 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
     useEffect(() => {
         console.log('useEffect::', state.pool)
         updateJumperManifestDetails()
-    }, [state.pool]);
+    }, [state]);
 
     const onDragEnd = useCallback((result) => {
         doDragEnd(result)
@@ -98,6 +98,7 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 result.source.droppableId === "poolList"
                 && result.destination.droppableId === "poolList"
             ) {
+                console.log('result', result)
                 dispatch({type: 'pool/moved', payload: result})
                 reloadJumperList()
             }
