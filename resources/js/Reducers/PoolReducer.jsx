@@ -5,7 +5,6 @@ export default function poolReducer(state, action) {
     var statePool = []
     switch (action.type) {
         case 'jumpers/loaded' : {
-            console.log('loading jumpers')
             return {
                 ...state,
                 jumpers: action.payload.data,
@@ -13,7 +12,6 @@ export default function poolReducer(state, action) {
         }
 
         case 'pool/added': {
-            console.log('state.jumpers[action.payload.source.index]', state.jumpers[action.payload.source.index])
             statePool = state.pool
             statePool.splice(action.payload.destination.index, 0, state.jumpers[action.payload.source.index])
             return {
