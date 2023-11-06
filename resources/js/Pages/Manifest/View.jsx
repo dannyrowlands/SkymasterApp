@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useReducer} from 'react'
+import React, {useEffect, useCallback, useReducer} from 'react'
 import {Head} from "@inertiajs/react"
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css"
@@ -6,7 +6,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css"
 import '../../../css/Calendar.css'
 
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import {createStore} from "redux";
 import poolReducer from "@/Reducers/PoolReducer.jsx";
 
 const View = ({ auth, manifests, pool, jumpers, type }) => {
@@ -52,7 +51,6 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
     }
 
     useEffect(() => {
-        console.log('useEffect::', state.pool)
         updateJumperManifestDetails()
     }, [state]);
 
@@ -61,10 +59,8 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
     }, []);
 
     async function doDragEnd(result) {
-        console.log(result)
         if (result.reason === "DROP") {
             if (!result.destination) {
-                console.log('no action', result)
                 return;
             }
 
@@ -72,12 +68,10 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 result.source.droppableId === "jumpersList"
                 && result.destination.droppableId === "poolList"
             ) {
-                console.log(state)
                 await addToPool(result)
                     .then (function (response) {
                         dispatch({type: 'pool/added', payload: result})
                         reloadJumperList()
-                        console.log('after',state)
                     }
                 )
             }
@@ -98,7 +92,6 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 result.source.droppableId === "poolList"
                 && result.destination.droppableId === "poolList"
             ) {
-                console.log('result', result)
                 dispatch({type: 'pool/moved', payload: result})
                 reloadJumperList()
             }
@@ -112,9 +105,6 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
                 poolState : state.pool,
             }
         )
-            .then(function (response) {
-                console.log('Saved (bool)::',state.pool)
-            })
             .catch(function (error) {
                 console.log('ERROR RESPONSE::', error)
                 if(error.code === 'ERR_BAD_REQUEST') {
