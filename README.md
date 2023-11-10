@@ -17,11 +17,13 @@ Then navigate to root of project
 
 
 **Run the following -** 
-* * `composer install` bb
+* * `composer install`
 * * `npm install` (you may need to add `--legacy-peer-deps` to this command for it to run successfully)
 * * `npm run build`
 * * Run `./vendor/bin/sail up -d`
+* * Run `sail artisan migrate` (If database is not built automatically, add `--force`)
+* * Run `sail artisan db:seed`
 
-You should now be able to navigate to http://locahost and register with the application.
+You should now be able to navigate to http://locahost and register with the application with data already seeded.
 
 **Please note Drag and Drop for manifest tabs is still a WIP and as such does not function fully yet.**
