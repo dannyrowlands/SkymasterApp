@@ -53,22 +53,45 @@ const View = ({ auth, manifests, pool, jumpers, type }) => {
 
                                             </div>
                                             <div className="col-span-6">
-                                                {/*<Droppable*/}
-                                                {/*    droppableId={'manifest'}*/}
-                                                {/*    renderClone={(provided, snapshot, rubric) => (*/}
-                                                {/*        <div*/}
-                                                {/*            {...provided.draggableProps}*/}
-                                                {/*            {...provided.dragHandleProps}*/}
-                                                {/*            ref={provided.innerRef}*/}
-                                                {/*        >*/}
-                                                {/*            */}
-                                                {/*        </div>*/}
-                                                {/*    )}*/}
-                                                {/*>*/}
-                                                {/*    {provided => (*/}
-                                                         <ManifestTab state={state} ></ManifestTab>
-                                                {/*    )}*/}
-                                                {/*</Droppable>*/}
+                                                <Droppable
+                                                    droppableId={'manifestbase'}
+                                                    renderClone={(provided, snapshot, rubric) => (
+                                                        <div
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            ref={provided.innerRef}
+                                                        >
+                                                            <ManifestTab manifest={state.manifestsList[rubric.source.index]} ></ManifestTab>
+                                                        </div>
+                                                    )}
+                                                >
+                                                    {provided => (
+                                                        <>
+                                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                                            <div className="grid grid-cols-4 gap-4">
+                                                                {state.manifestsList.map((manifest, index) => (
+                                                                    <Draggable
+                                                                        draggableId={'manifesttab'+index}
+                                                                        index={index}
+                                                                        key={'manifestbasedrag'+index}
+                                                                    >
+                                                                        {(provided, snapshot) => (
+                                                                            <div
+                                                                                {...provided.draggableProps}
+                                                                                {...provided.dragHandleProps}
+                                                                                ref={provided.innerRef}
+                                                                            >
+                                                                                <ManifestTab manifest={manifest} ></ManifestTab>
+                                                                            </div>
+                                                                        )}
+                                                                    </Draggable>
+                                                                ))}
+                                                            </div>
+                                                            {provided.placeholder}
+                                                        </div>
+                                                        </>
+                                                    )}
+                                                </Droppable>
                                             </div>
                                         </div>
                                     </DragDropContext>
