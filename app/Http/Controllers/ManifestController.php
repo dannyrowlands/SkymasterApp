@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jumper;
+use App\Models\Manifest;
 use App\Models\ManifestDetails;
 use App\Models\Pool;
 use Illuminate\Http\Request;
@@ -109,7 +110,21 @@ class ManifestController extends Controller
 
     private function getManifestsData()
     {
-        return [];
+        $manifests = Manifest::
+        where('dropzone_id', '=', auth()->user()->dropzone_id)
+            ->get();
+
+        $manifests_array = [];
+        foreach($manifests as $manifest)
+        {
+            $jumpers = $this->getJumpersArray($manifest);
+            $object = new \stdClass();
+            $object->order = $manifest->order;
+            $object->data = $jumpers;
+            $manifests_array[] = $object;
+        }
+
+        return $manifests_array;
     }
 
     /**
@@ -124,5 +139,23 @@ class ManifestController extends Controller
                 'dropzone_id' => Auth::user()->dropzone_id
             ]
         )->first();
+    }
+
+    /**
+     * @param mixed $manifest
+     * @return array
+     */
+    private function getJumpersArray(mixed $manifest): array
+    {
+        $jumpers = [];
+        foreach (json_decode($manifest->id_list) as $jumper_id) {
+            $jumpers[] = Jumper::where('id', '=', $jumper_id)
+                ->with(
+                    'Individual',
+                    'Individual.Medical'
+                )
+                ->first();
+        }
+        return $jumpers;
     }
 }
