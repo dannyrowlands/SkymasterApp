@@ -24,3 +24,4 @@ Then navigate to root of project
 
 You should now be able to navigate to http://locahost and register with the application.
 
+**Please note Drag and Drop for manifest tabs is still a WIP and as such does not function fully yet.**
